@@ -1,1 +1,14 @@
-{"stock": {}, "flyers": {}}
+{
+ "stock": {
+  "https://www.lagranderecre.fr/anniversaire-et-deguisements/": "in_stock",
+  "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html": "in_stock"
+ },
+ "flyers": {},
+ "collections": {
+  "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html": [
+   "https://www.lagranderecre.fr/anniversaire-et-deguisements/",
+   "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html",
+   "https://www.lagranderecre.fr/evenements/anniversaire.html"
+  ]
+ }
+}
