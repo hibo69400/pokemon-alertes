@@ -3,7 +3,7 @@
 # ─────────────────────────────────────────────────────────────
 
 # Ta ville (sert seulement d'étiquette dans les notifications)
-ville: "Ma ville"
+ville: "ta ville"
 
 # Un texte est considéré comme lié à Pokémon s'il contient un de ces mots
 # (accents et majuscules ignorés)
