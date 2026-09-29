@@ -1,36 +1,61 @@
 # ─────────────────────────────────────────────────────────────
-#  CONFIGURATION — à modifier avec TES liens
+#  CONFIGURATION — Alertes Pokémon 30 ans
 # ─────────────────────────────────────────────────────────────
 
-# Ta ville (sert seulement d'étiquette dans les notifications)
-ville: "ta ville"
+ville: "Villefranche-sur-Saône"   # sert d'étiquette dans les notifications
 
-# Un texte est considéré comme lié à Pokémon s'il contient un de ces mots
-# (accents et majuscules ignorés)
+# Un texte est lié à Pokémon s'il contient un de ces mots (accents/majuscules ignorés)
 mots_cles: ["pokemon"]
 
-# Si l'un de ces mots apparaît aussi, la notification le signale (30 ans)
+# Mots qui signalent le 30e anniversaire dans un prospectus
 mots_cles_30ans: ["30 ans", "30th", "30e anniversaire", "trentieme"]
 
-# Modèle utilisé pour lire les pages de prospectus (nécessite ANTHROPIC_API_KEY)
+# Mots qui signalent un produit 30 ans dans une page de collection (nom ou adresse du lien)
+mots_cles_collections: ["30 ans", "30th", "30e", "30eme", "anniversaire", "celebration"]
+
+# Lecture des prospectus en images par IA (nécessite le secret ANTHROPIC_API_KEY)
 modele_ia: "claude-haiku-4-5-20251001"
-max_pages_ia: 40        # limite de pages lues par prospectus (contrôle le coût)
+max_pages_ia: 40                # limite de pages lues par prospectus (contrôle le coût)
+max_produits_par_page: 40       # limite de produits vérifiés par page de collection
 
-# ── Produits à surveiller ────────────────────────────────────
-# Colle l'adresse EXACTE de la page du produit.
-# Pour un stock lié à ton magasin : sur le site de l'enseigne, choisis ton
-# magasin, ouvre la page du produit, puis copie l'adresse affichée.
-produits:
-  - nom: "Exemple - Display 30 ans"
-    enseigne: "Boutique exemple"
-    url: "https://www.example.com/produit-pokemon-30-ans"
-    # Optionnel : ajuster si le site utilise d'autres formulations
-    # marqueurs_rupture: ["rupture de stock", "indisponible"]
-    # marqueurs_dispo: ["ajouter au panier"]
+# ── 1) PAGES DE COLLECTION ───────────────────────────────────
+# Une adresse par enseigne : la page qui liste les produits Pokémon 30 ans.
+# Le script te prévient : d'un NOUVEAU produit 30 ans, et d'un retour EN STOCK.
+# Comment trouver l'adresse : sur le site de l'enseigne, cherche « Pokémon 30 ans »,
+# ouvre la page de résultats ou de collection, copie l'adresse de la barre du navigateur.
+# « deja_pokemon: true » = la page ne contient que du Pokémon (les noms des produits
+# peuvent alors ne pas contenir le mot « Pokémon »).
+collections:
+  - nom: "La Grande Récré"
+    url: "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html"
+    deja_pokemon: true
 
-# ── Prospectus à lire ────────────────────────────────────────
-# Adresse directe d'un PDF, d'une image, ou d'une page web de prospectus
-# de ton magasin. Chaque nouvelle version est analysée une seule fois.
-prospectus:
-  - nom: "Exemple - Prospectus du magasin"
-    url: "https://www.example.com/prospectus.pdf"
+  # À décommenter et compléter avec les adresses trouvées (enlève le # devant chaque ligne) :
+  # - nom: "King Jouet"
+  #   url: "COLLE ICI L'ADRESSE DE LA PAGE POKÉMON 30 ANS"
+  # - nom: "JouéClub"
+  #   url: "COLLE ICI L'ADRESSE"
+  # - nom: "Micromania"
+  #   url: "COLLE ICI L'ADRESSE"
+  # - nom: "Cultura"
+  #   url: "COLLE ICI L'ADRESSE"
+  # - nom: "E.Leclerc"
+  #   url: "COLLE ICI L'ADRESSE"
+  # - nom: "Carrefour"
+  #   url: "COLLE ICI L'ADRESSE"
+  # - nom: "Auchan"
+  #   url: "COLLE ICI L'ADRESSE"
+
+# ── 2) PRODUITS PRÉCIS (facultatif) ──────────────────────────
+# Pour suivre une page produit en particulier (une ligne par produit).
+produits: []
+  # - nom: "Coffret Dresseur d'Élite 30e Anniversaire"
+  #   enseigne: "King Jouet"
+  #   url: "ADRESSE EXACTE DE LA PAGE DU PRODUIT"
+
+# ── 3) PROSPECTUS ────────────────────────────────────────────
+# Adresse d'un PDF, d'une image ou d'une page web de prospectus.
+# Chaque nouvelle version est analysée une seule fois.
+prospectus: []
+  # - nom: "Prospectus Carrefour"
+  #   url: "ADRESSE DU PDF OU DE LA PAGE DU PROSPECTUS"
