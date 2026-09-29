@@ -10,6 +10,7 @@ import re
 import time
 import unicodedata
 from pathlib import Path
+from urllib.parse import urldefrag, urljoin
 
 import requests
 import yaml
@@ -31,6 +32,10 @@ AVAIL_PATTERNS = [
     re.compile(r'"availability"\s*:\s*"(?:https?:)?(?://)?schema\.org/(\w+)"', re.I),
     re.compile(r'itemprop=["\']availability["\'][^>]*?(?:href|content)=["\'](?:https?:)?(?://)?schema\.org/(\w+)', re.I),
 ]
+ANCHOR_RE = re.compile(r"<a\b([^>]*)>(.*?)</a>", re.I | re.S)
+HREF_RE = re.compile(r"href=(?:\"([^\"]*)\"|'([^']*)')", re.I)
+ATTR_TEXT_RE = re.compile(r"(?:title|aria-label)=(?:\"([^\"]*)\"|'([^']*)')", re.I)
+DEFAULT_ANNIV_WORDS = ["30 ans", "30th", "30e", "30eme", "anniversaire", "celebration"]
 VISION_PROMPT = (
     "Cette image est une page d'un prospectus de magasin français. Contient-elle des "
     "produits Pokémon (cartes à collectionner, boosters, displays, coffrets), notamment "
@@ -55,6 +60,7 @@ def load_state():
         state = {}
     state.setdefault("stock", {})
     state.setdefault("flyers", {})
+    state.setdefault("collections", {})
     return state
 
 
@@ -215,6 +221,72 @@ def analyse_flyer(f, cfg, state, api_key):
         log("  aucun produit Pokémon repéré")
 
 
+# ── Pages de collection (tous les produits 30 ans d'une enseigne) ──
+def extract_products(html, base_url, cfg, deja_pokemon=False):
+    """Repère, dans une page de liste, les liens de produits Pokémon 30 ans."""
+    anniv_words = [norm(w) for w in cfg.get("mots_cles_collections", DEFAULT_ANNIV_WORDS)]
+    poke_words = [norm(w) for w in cfg.get("mots_cles", ["pokemon"])]
+    found = {}
+    for attrs, inner in ANCHOR_RE.findall(html):
+        m = HREF_RE.search(attrs)
+        if not m:
+            continue
+        href = (m.group(1) or m.group(2) or "").strip()
+        if href.startswith(("#", "javascript:", "mailto:", "tel:")):
+            continue
+        url = urldefrag(urljoin(base_url, href))[0]
+        label = " ".join(a or b for a, b in ATTR_TEXT_RE.findall(attrs)) + " " + re.sub(r"<[^>]+>", " ", inner)
+        label = re.sub(r"\s+", " ", label).strip()
+        hay = norm(label + " " + re.sub(r"[-_/.]", " ", url))
+        if not deja_pokemon and not any(w in hay for w in poke_words):
+            continue
+        if not any(w in hay for w in anniv_words):
+            continue
+        found.setdefault(url, label[:80] or url)
+    return found
+
+
+def run_collection(c, cfg, state):
+    ville = cfg.get("ville", "")
+    try:
+        r = requests.get(c["url"], headers=HEADERS, timeout=30)
+    except requests.RequestException as e:
+        log(f"  erreur réseau : {e}")
+        return
+    if r.status_code != 200:
+        log(f"  HTTP {r.status_code}")
+        return
+    products = extract_products(r.text, c["url"], cfg, c.get("deja_pokemon", False))
+    if not products:
+        log("  aucun produit 30 ans trouvé (page chargée en JavaScript ? lien trop général ?)")
+        return
+    first = c["url"] not in state["collections"]
+    known = set(state["collections"].get(c["url"], []))
+    limit = cfg.get("max_produits_par_page", 40)
+    in_stock_now = []
+    for purl, name in list(products.items())[:limit]:
+        status = check_stock({"url": purl})
+        prev = state["stock"].get(purl)
+        log(f"  {name[:50]} : {status} (avant : {prev})")
+        if status != "unknown":
+            state["stock"][purl] = status
+        if status == "in_stock":
+            in_stock_now.append(name)
+            if not first and prev != "in_stock":
+                notify(f"🟢 En stock : {name}", f"{c['nom']} — disponible ({ville})",
+                       click=purl, priority=5, tags=["rotating_light"])
+        elif not first and purl not in known:
+            notify(f"🆕 Nouveau produit 30 ans : {name}",
+                   f"{c['nom']} — vient d'apparaître (stock non confirmé)",
+                   click=purl, priority=3, tags=["new"])
+        time.sleep(1.5)
+    if first:
+        lignes = "\n".join(in_stock_now[:8]) or "aucun détecté en stock pour l'instant"
+        notify(f"📋 {c['nom']} : {len(products)} produits 30 ans repérés",
+               f"En stock maintenant :\n{lignes}", click=c["url"], priority=3, tags=["clipboard"])
+    state["collections"][c["url"]] = sorted(known | set(products))
+
+
 # ── Boucle principale ────────────────────────────────────────
 def run_once():
     cfg = yaml.safe_load(CONFIG_FILE.read_text(encoding="utf-8"))
@@ -232,6 +304,12 @@ def run_once():
                 notify(f"🟢 En stock : {p['nom']}",
                        f"{p.get('enseigne', '')} — disponible maintenant ({cfg.get('ville', '')})",
                        click=p["url"], priority=5, tags=["rotating_light"])
+        time.sleep(2)
+    for c in cfg.get("collections") or []:
+        if "example.com" in c["url"]:
+            continue
+        log(f"[collection] {c['nom']}")
+        run_collection(c, cfg, state)
         time.sleep(2)
     for f in cfg.get("prospectus") or []:
         if "example.com" in f["url"]:
@@ -259,4 +337,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
