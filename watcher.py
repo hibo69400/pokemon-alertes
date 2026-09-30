@@ -61,6 +61,7 @@ def load_state():
     state.setdefault("stock", {})
     state.setdefault("flyers", {})
     state.setdefault("collections", {})
+    state.setdefault("erreurs", {})
     return state
 
 
@@ -120,6 +121,20 @@ def keyword_hits(text, cfg):
     base = any(norm(k) in t for k in cfg.get("mots_cles", ["pokemon"]))
     anniv = any(norm(k) in t for k in cfg.get("mots_cles_30ans", ["30 ans"]))
     return base, anniv
+
+
+def keyword_snippets(text, cfg):
+    """Phrases/lignes contenant un mot-clé (pour ne notifier que si elles changent)."""
+    words = [norm(k) for k in cfg.get("mots_cles", ["pokemon"])]
+    seen, out = set(), []
+    for seg in re.split(r"\n+|(?<=[.!?])\s+", text):
+        seg = re.sub(r"\s+", " ", seg).strip()
+        if len(seg) < 8 or seg in seen:
+            continue
+        if any(w in norm(seg) for w in words):
+            seen.add(seg)
+            out.append(seg[:160])
+    return out[:5]
 
 
 def vision_check(api_key, model, data, media_type):
@@ -206,9 +221,19 @@ def analyse_flyer(f, cfg, state, api_key):
         elif res.get("pokemon"):
             hits.append(("image", res.get("resume", ""), bool(res.get("trentieme"))))
     else:
-        base, anniv = keyword_hits(re.sub(r"<[^>]+>", " ", r.text), cfg)
-        if base:
-            hits.append(("page web", "", anniv))
+        text = re.sub(r"<script.*?</script>|<style.*?</style>", " ", r.text, flags=re.S | re.I)
+        text = re.sub(r"</?(?:p|div|li|h\d|br|tr|td|section|article)\b[^>]*>", "\n", text, flags=re.I)
+        text = re.sub(r"<[^>]+>", " ", text)
+        snips = keyword_snippets(text, cfg)
+        if snips:
+            snip_digest = hashlib.sha256("|".join(snips).encode()).hexdigest()
+            if state["flyers"].get(url + "#extraits") == snip_digest:
+                state["flyers"][url] = digest
+                log("  mêmes extraits Pokémon qu'avant, rien de nouveau")
+                return
+            state["flyers"][url + "#extraits"] = snip_digest
+            anniv = any(keyword_hits(s, cfg)[1] for s in snips)
+            hits.append(("page web", snips[0], anniv))
     if errors == 0:
         state["flyers"][url] = digest
     if hits:
@@ -246,20 +271,31 @@ def extract_products(html, base_url, cfg, deja_pokemon=False):
     return found
 
 
+def signale_probleme(c, state, raison):
+    """Prévient UNE fois (par enseigne) que la page n'est pas lisible."""
+    log(f"  {raison}")
+    if not state["erreurs"].get(c["url"]):
+        notify(f"⚠️ {c['nom']} : page illisible",
+               f"{raison}. Ce site n'est pas surveillé pour l'instant.",
+               click=c["url"], priority=3, tags=["warning"])
+        state["erreurs"][c["url"]] = True
+
+
 def run_collection(c, cfg, state):
     ville = cfg.get("ville", "")
     try:
         r = requests.get(c["url"], headers=HEADERS, timeout=30)
     except requests.RequestException as e:
-        log(f"  erreur réseau : {e}")
+        signale_probleme(c, state, f"erreur réseau ({type(e).__name__})")
         return
     if r.status_code != 200:
-        log(f"  HTTP {r.status_code}")
+        signale_probleme(c, state, f"le site répond HTTP {r.status_code} (il bloque le script ou l'adresse est fausse)")
         return
     products = extract_products(r.text, c["url"], cfg, c.get("deja_pokemon", False))
     if not products:
-        log("  aucun produit 30 ans trouvé (page chargée en JavaScript ? lien trop général ?)")
+        signale_probleme(c, state, "aucun produit 30 ans repéré (page vide, chargée en JavaScript, ou mauvaise adresse)")
         return
+    state["erreurs"].pop(c["url"], None)
     first = c["url"] not in state["collections"]
     known = set(state["collections"].get(c["url"], []))
     limit = cfg.get("max_produits_par_page", 40)
