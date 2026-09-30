@@ -26,25 +26,37 @@ max_produits_par_page: 40       # limite de produits vérifiés par page de coll
 # « deja_pokemon: true » = la page ne contient que du Pokémon (les noms des produits
 # peuvent alors ne pas contenir le mot « Pokémon »).
 collections:
+  # Adresses trouvées et vérifiées (pages qui listent des produits Pokémon)
   - nom: "La Grande Récré"
     url: "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html"
     deja_pokemon: true
+  - nom: "E.Leclerc (cartes Pokémon)"
+    url: "https://www.e.leclerc/cat/cartes-pokemon"
+    deja_pokemon: true
+  - nom: "Auchan (marque Pokémon)"
+    url: "https://www.auchan.fr/marques/pokemon/ca-55409"
+    deja_pokemon: true
 
-  # À décommenter et compléter avec les adresses trouvées (enlève le # devant chaque ligne) :
-  # - nom: "King Jouet"
-  #   url: "COLLE ICI L'ADRESSE DE LA PAGE POKÉMON 30 ANS"
-  # - nom: "JouéClub"
-  #   url: "COLLE ICI L'ADRESSE"
-  # - nom: "Micromania"
-  #   url: "COLLE ICI L'ADRESSE"
-  # - nom: "Cultura"
-  #   url: "COLLE ICI L'ADRESSE"
-  # - nom: "E.Leclerc"
-  #   url: "COLLE ICI L'ADRESSE"
-  # - nom: "Carrefour"
-  #   url: "COLLE ICI L'ADRESSE"
-  # - nom: "Auchan"
-  #   url: "COLLE ICI L'ADRESSE"
+  # ⚠️ ESSAIS : adresses de recherche « pokemon 30 ans » NON vérifiées.
+  # Si une enseigne échoue, tu reçois une alerte « page illisible » : cherche alors
+  # « Pokémon 30 ans » sur son site, copie l'adresse de la barre du navigateur
+  # et remplace la ligne url.
+  - nom: "King Jouet"
+    url: "https://www.king-jouet.com/jeux-jouets/recherche.htm?q=pokemon+30+ans"
+  - nom: "JouéClub"
+    url: "https://www.joueclub.fr/catalogsearch/result/?q=pokemon+30+ans"
+  - nom: "Micromania"
+    url: "https://www.micromania.fr/search?q=pokemon+30+ans"
+  - nom: "Cultura"
+    url: "https://www.cultura.com/search/results?search_query=pokemon+30+ans"
+  - nom: "Fnac"
+    url: "https://www.fnac.com/SearchResult/ResultList.aspx?Search=pokemon+30+ans"
+  - nom: "Carrefour"
+    url: "https://www.carrefour.fr/s?q=pokemon+30+ans"
+  - nom: "Intermarché"
+    url: "https://www.intermarche.com/recherche/pokemon%2030%20ans"
+  - nom: "Super U"
+    url: "https://www.coursesu.com/recherche?q=pokemon+30+ans"
 
 # ── 2) PRODUITS PRÉCIS (facultatif) ──────────────────────────
 # Pour suivre une page produit en particulier (une ligne par produit).
@@ -54,8 +66,15 @@ produits: []
   #   url: "ADRESSE EXACTE DE LA PAGE DU PRODUIT"
 
 # ── 3) PROSPECTUS ────────────────────────────────────────────
-# Adresse d'un PDF, d'une image ou d'une page web de prospectus.
-# Chaque nouvelle version est analysée une seule fois.
-prospectus: []
-  # - nom: "Prospectus Carrefour"
-  #   url: "ADRESSE DU PDF OU DE LA PAGE DU PROSPECTUS"
+# Adresse d'un PDF, d'une image (lus page par page avec l'IA) ou d'une page web
+# (le texte est lu, une alerte n'est envoyée que si les phrases Pokémon changent).
+# Pages web trouvées : elles listent les offres/titres des catalogues, PAS les pages
+# intérieures des prospectus. Pour lire l'intérieur d'un prospectus, colle l'adresse
+# de son PDF (ou de l'image d'une page) : ça change chaque semaine.
+prospectus:
+  - nom: "Auchan - catalogue (offre Pokémon 30 ans)"
+    url: "https://www.123catalogue.fr/catalogue/auchan/coffret-journee-pokemon-30ans-604073"
+  - nom: "Intermarché Villefranche - catalogues"
+    url: "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3"
+  # - nom: "Prospectus Carrefour de la semaine"
+  #   url: "ADRESSE DU PDF"
