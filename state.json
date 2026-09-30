@@ -3,12 +3,26 @@
   "https://www.lagranderecre.fr/anniversaire-et-deguisements/": "in_stock",
   "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html": "in_stock"
  },
- "flyers": {},
+ "flyers": {
+  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "4917f7d4fec5c11788f304978e48504c8b3fef8e506a8c5a6efb1e96a863404c"
+ },
  "collections": {
   "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html": [
    "https://www.lagranderecre.fr/anniversaire-et-deguisements/",
    "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html",
    "https://www.lagranderecre.fr/evenements/anniversaire.html"
   ]
+ },
+ "erreurs": {
+  "https://www.e.leclerc/cat/cartes-pokemon": true,
+  "https://www.auchan.fr/marques/pokemon/ca-55409": true,
+  "https://www.king-jouet.com/jeux-jouets/recherche.htm?q=pokemon+30+ans": true,
+  "https://www.joueclub.fr/catalogsearch/result/?q=pokemon+30+ans": true,
+  "https://www.micromania.fr/search?q=pokemon+30+ans": true,
+  "https://www.cultura.com/search/results?search_query=pokemon+30+ans": true,
+  "https://www.fnac.com/SearchResult/ResultList.aspx?Search=pokemon+30+ans": true,
+  "https://www.carrefour.fr/s?q=pokemon+30+ans": true,
+  "https://www.intermarche.com/recherche/pokemon%2030%20ans": true,
+  "https://www.coursesu.com/recherche?q=pokemon+30+ans": true
  }
 }
