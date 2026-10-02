@@ -1,16 +1,20 @@
 {
  "stock": {
   "https://www.lagranderecre.fr/anniversaire-et-deguisements/": "in_stock",
-  "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html": "in_stock"
+  "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html": "in_stock",
+  "https://www.lagranderecre.fr/jeux-de-societe/cartes-a-collectionner/-6-boosters-pokemon-30e-anniversaire.html": "in_stock",
+  "https://www.lagranderecre.fr/jeux-de-societe/cartes-a-collectionner/mini-tin-pokemon-30e-anniversaire.html": "in_stock"
  },
  "flyers": {
-  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "58ecc8c7ca147537d595b816c4e6fc2d85c2dae7b16ffb28e4abc1037e6c16cb"
+  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "f6ccb3a07237fad14383548de355f96192573187c09d2a523e39713e0daf0441"
  },
  "collections": {
   "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html": [
    "https://www.lagranderecre.fr/anniversaire-et-deguisements/",
    "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html",
-   "https://www.lagranderecre.fr/evenements/anniversaire.html"
+   "https://www.lagranderecre.fr/evenements/anniversaire.html",
+   "https://www.lagranderecre.fr/jeux-de-societe/cartes-a-collectionner/-6-boosters-pokemon-30e-anniversaire.html",
+   "https://www.lagranderecre.fr/jeux-de-societe/cartes-a-collectionner/mini-tin-pokemon-30e-anniversaire.html"
   ]
  },
  "erreurs": {
