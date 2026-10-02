@@ -6,7 +6,7 @@
   "https://www.lagranderecre.fr/jeux-de-societe/cartes-a-collectionner/mini-tin-pokemon-30e-anniversaire.html": "in_stock"
  },
  "flyers": {
-  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "f6ccb3a07237fad14383548de355f96192573187c09d2a523e39713e0daf0441"
+  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "43caa572835d2a123e08380d5a982340a46d6b3a04765ff968ddd6af684e7009"
  },
  "collections": {
   "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html": [
@@ -27,6 +27,7 @@
   "https://www.fnac.com/SearchResult/ResultList.aspx?Search=pokemon+30+ans": true,
   "https://www.carrefour.fr/s?q=pokemon+30+ans": true,
   "https://www.intermarche.com/recherche/pokemon%2030%20ans": true,
-  "https://www.coursesu.com/recherche?q=pokemon+30+ans": true
+  "https://www.coursesu.com/recherche?q=pokemon+30+ans": true,
+  "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html": true
  }
 }
