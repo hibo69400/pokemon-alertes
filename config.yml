@@ -80,55 +80,126 @@ prospectus:
   #   url: "ADRESSE DU PDF"
 
 # ── 4) VEILLE COMMUNAUTAIRE : internet, forums, réseaux sociaux ──
-# Le script lit ces sources à chaque passage et te notifie quand un NOUVEAU post parle
-# d'un restock / réassort / retour en stock Pokémon. Au tout premier passage d'une source,
-# il mémorise l'existant sans rien envoyer (pas d'avalanche), puis te prévient d'un seul
-# message « Veille activée ». Une même info vue sur plusieurs sources = une seule alerte.
+# Le script lit ces sources en continu et te notifie quand un NOUVEAU post parle d'un
+# restock / réassort / retour en stock Pokémon (tabacs et maisons de la presse compris).
+# Au tout premier passage d'une source, il mémorise l'existant sans rien envoyer, puis te
+# prévient d'un seul message « Veille activée ». Même info vue sur plusieurs sources = une
+# seule alerte.
 #
+# 📍 ZONE : un post qui cite une de ces communes (ou un de ces codes postaux) reçoit un 📍,
+# la priorité maximale, et passe en premier. « large » = priorité haute sans être max.
+# Un post sans lieu (restock en ligne, par exemple) est alerté normalement, sauf si tu mets
+# zone_stricte: true plus bas (alors SEULS les posts qui citent un lieu ci-dessous passent).
+zone:
+  proche:
+    - "Villefranche"
+    - "Villefranche-sur-Saône"
+    - "Limas"
+    - "Gleizé"
+    - "Arnas"
+    - "Jassans"
+    - "Jassans-Riottier"
+    - "Anse"
+    - "Saint-Georges-de-Reneins"
+    - "Belleville"
+    - "Belleville-en-Beaujolais"
+    - "Trévoux"
+    - "Reyrieux"
+    - "Neuville-sur-Saône"
+    - "Genay"
+    - "Montmerle"
+    - "Thoissey"
+    - "Tarare"
+    - "Chazay-d'Azergues"
+    - "Lozanne"
+    - "Quincieux"
+    - "Beaujolais"
+    - "69400"
+    - "69480"
+    - "69220"
+    - "69640"
+    - "69170"
+    - "69380"
+    - "01480"
+    - "01600"
+  large:
+    - "Lyon"
+    - "Rhône"
+    - "Auvergne-Rhône-Alpes"
+    - "Beynost"
+    - "Dombes"
+    - "Villars-les-Dombes"
+    - "Bourg-en-Bresse"
+    - "Mâcon"
+
 # Réglages communs (tous facultatifs) :
 veille_options:
   max_notifs_par_source: 3      # au-delà, un seul message groupé « N autres alertes »
+  intervalle_min: 3             # minutes minimum entre deux lectures d'une même source
+  zone_stricte: false           # true = n'alerter QUE les posts qui citent un lieu de « zone »
   # mots_restock: [...]         # un post doit contenir un de ces mots (début de mot suffit)
   # mots_exclus: [...]          # un post contenant un de ces mots entier est ignoré
   #                             # (par défaut : vends, wts, wtb, echange, recherche, cherche…)
 #
 # Réglages possibles par source : deja_pokemon: true (la source ne parle que de Pokémon),
 # exiger_restock: false (alerter sur TOUT post Pokémon, utile pour un canal dédié aux restocks),
-# priorite: 1 à 5, mots_restock / mots_exclus (remplacent les réglages communs).
+# zone_stricte: true/false, intervalle_min, priorite (1 à 5), mots_restock / mots_exclus.
 #
-# ⚠️ Aucune de ces adresses n'a pu être testée depuis ton dépôt. Lance d'abord le diagnostic :
+# ⚠️ Beaucoup de ces adresses n'ont pas pu être testées. Lance le diagnostic :
 #       python watcher.py --veille-test
 # Il affiche, source par source, ce qui est lu et ce qui déclencherait une alerte
-# (sans notification ni sauvegarde). Une source en panne 3 passages de suite
-# (~45 min) te envoie une alerte « source illisible », comme pour les magasins.
+# (✅ = alerte, 📍 = zone proche, 🔥 = 30 ans), sans notification ni sauvegarde.
+# Une source en panne 3 lectures de suite te envoie une alerte « source illisible ».
 veille:
-  # — Internet en général : presse, blogs, sites spécialisés (via Google Actualités) —
-  - nom: "Web - restocks Pokémon (Google Actualités)"
-    type: rss
-    url: "https://news.google.com/rss/search?q=pokemon+(restock+OR+r%C3%A9assort+OR+%22retour+en+stock%22)+when:7d&hl=fr&gl=FR&ceid=FR:fr"
-  - nom: "Web - Pokémon 30 ans (Google Actualités)"
-    type: rss
-    url: "https://news.google.com/rss/search?q=pokemon+%2230+ans%22+(cartes+OR+coffret+OR+display)+when:1d&hl=fr&gl=FR&ceid=FR:fr"
+  # — Communautés / influenceurs français qui lancent des alertes restock —
+  # Pikacheck (boutique + alertes gratuites sur X et Discord). Lecture de X = méthode non
+  # officielle, EXPÉRIMENTALE : si le diagnostic dit « aucun tweet lisible », supprime ce bloc.
+  - nom: "X - Pikacheck (alertes restock)"
+    type: x
+    compte: "PikaCheck"
+    deja_pokemon: true
+    intervalle_min: 5
 
-  # — Dealabs : fil de la communauté « disponibilités et réassorts Pokémon TCG » —
-  # (la page existe ; la lecture de ses commentaires par le script reste à confirmer)
+  # Dealabs : fil de la communauté « disponibilités et réassorts Pokémon TCG »
+  # (la page existe ; la lecture de ses commentaires reste incertaine : ils se chargent
+  #  sans doute en JavaScript. Dealabs a aussi une fonction « Créer une alerte » dans son
+  #  appli : active-la sur le mot « pokémon » en complément.)
   - nom: "Dealabs - fil réassorts Pokémon TCG"
     type: page
     url: "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943"
     deja_pokemon: true
+    intervalle_min: 10
 
-  # — Reddit (flux RSS de recherche). Reddit bloque parfois les serveurs GitHub (erreur 403) :
-  #   si c'est le cas, le diagnostic te le dira et tu peux supprimer ces deux blocs. —
+  # Reddit (flux RSS de recherche). Un seul flux : Reddit refuse (erreur 429) deux requêtes de suite.
   - nom: "Reddit - r/PokemonTCG restock"
     type: rss
     url: "https://www.reddit.com/r/PokemonTCG/search.rss?q=restock+OR+%22back+in+stock%22&restrict_sr=on&sort=new&t=day"
     deja_pokemon: true
-  # (r/PokeInvesting désactivé : Reddit répondait « 429 trop de requêtes » quand on lui en
-  #  envoie deux de suite. Un seul flux Reddit passe correctement.)
-  # - nom: "Reddit - r/PokeInvesting restock"
-  #   type: rss
-  #   url: "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day"
-  #   deja_pokemon: true
+    intervalle_min: 15
+
+  # — Internet en général : presse, blogs, sites spécialisés (via Google Actualités) —
+  - nom: "Web - restocks Pokémon (Google Actualités)"
+    type: rss
+    url: "https://news.google.com/rss/search?q=pokemon+(restock+OR+r%C3%A9assort+OR+%22retour+en+stock%22)+when:7d&hl=fr&gl=FR&ceid=FR:fr"
+    intervalle_min: 8
+  - nom: "Web - Pokémon 30 ans (Google Actualités)"
+    type: rss
+    url: "https://news.google.com/rss/search?q=pokemon+%2230+ans%22+(cartes+OR+coffret+OR+display)+when:1d&hl=fr&gl=FR&ceid=FR:fr"
+    intervalle_min: 8
+
+  # — Local : presse du secteur et tabacs —
+  # Les tabacs n'ont pas de site à surveiller : on ne les repère que par les posts
+  # des communautés et par la presse locale (Le Progrès, etc.).
+  - nom: "Local - Pokémon cartes Villefranche / Beaujolais"
+    type: rss
+    url: "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr"
+    exiger_restock: false
+    intervalle_min: 15
+  - nom: "Tabacs - cartes Pokémon (Google Actualités)"
+    type: rss
+    url: "https://news.google.com/rss/search?q=pokemon+tabac+(cartes+OR+boosters+OR+coffrets)+when:7d&hl=fr&gl=FR&ceid=FR:fr"
+    exiger_restock: false
+    intervalle_min: 15
 
   # — Telegram : canaux PUBLICS d'alertes restock. Je n'ai pas pu en vérifier de fiables :
   #   trouve ceux qui t'intéressent (cherche « restock pokemon » dans Telegram), puis note le
@@ -139,14 +210,15 @@ veille:
   #   canal: "nom_du_canal"
   #   deja_pokemon: true
   #   exiger_restock: false      # un canal dédié aux restocks : on alerte sur tous ses posts
+  #   intervalle_min: 4
 
-  # — Bluesky : chaque compte a un flux RSS. Remplace par le pseudo d'un compte qui relaie les restocks —
+  # — Autre compte X (même méthode expérimentale que Pikacheck) —
+  # - nom: "X - NOM DU COMPTE"
+  #   type: x
+  #   compte: "pseudo_sans_arobase"
+  #   deja_pokemon: true
+
+  # — Bluesky : chaque compte a un flux RSS —
   # - nom: "Bluesky - NOM DU COMPTE"
   #   type: rss
   #   url: "https://bsky.app/profile/pseudo.bsky.social/rss"
-
-  # — X / Twitter : pas de flux gratuit stable. Seule piste : un pont RSS (RSSHub ou Nitter) que
-  #   tu héberges toi-même ou une instance publique qui tient dans la durée, par exemple :
-  # - nom: "X - NOM DU COMPTE"
-  #   type: rss
-  #   url: "https://TON-INSTANCE-RSSHUB/twitter/user/nom_du_compte"
