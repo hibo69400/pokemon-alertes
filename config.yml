@@ -105,7 +105,7 @@ veille:
   # — Internet en général : presse, blogs, sites spécialisés (via Google Actualités) —
   - nom: "Web - restocks Pokémon (Google Actualités)"
     type: rss
-    url: "https://news.google.com/rss/search?q=pokemon+(restock+OR+r%C3%A9assort+OR+%22retour+en+stock%22)+when:1d&hl=fr&gl=FR&ceid=FR:fr"
+    url: "https://news.google.com/rss/search?q=pokemon+(restock+OR+r%C3%A9assort+OR+%22retour+en+stock%22)+when:7d&hl=fr&gl=FR&ceid=FR:fr"
   - nom: "Web - Pokémon 30 ans (Google Actualités)"
     type: rss
     url: "https://news.google.com/rss/search?q=pokemon+%2230+ans%22+(cartes+OR+coffret+OR+display)+when:1d&hl=fr&gl=FR&ceid=FR:fr"
@@ -123,10 +123,12 @@ veille:
     type: rss
     url: "https://www.reddit.com/r/PokemonTCG/search.rss?q=restock+OR+%22back+in+stock%22&restrict_sr=on&sort=new&t=day"
     deja_pokemon: true
-  - nom: "Reddit - r/PokeInvesting restock"
-    type: rss
-    url: "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day"
-    deja_pokemon: true
+  # (r/PokeInvesting désactivé : Reddit répondait « 429 trop de requêtes » quand on lui en
+  #  envoie deux de suite. Un seul flux Reddit passe correctement.)
+  # - nom: "Reddit - r/PokeInvesting restock"
+  #   type: rss
+  #   url: "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day"
+  #   deja_pokemon: true
 
   # — Telegram : canaux PUBLICS d'alertes restock. Je n'ai pas pu en vérifier de fiables :
   #   trouve ceux qui t'intéressent (cherche « restock pokemon » dans Telegram), puis note le
