@@ -551,7 +551,7 @@ def run_veille(cfg, state):
         notify("📡 Veille communautaire activée",
                "Sources branchées :\n" + "\n".join(nouvelles[:10]) +
                "\nTu recevras les prochains posts sur les restocks Pokémon.",
-               priority=2, tags=["satellite"])
+               priority=3, tags=["satellite"])
 
 
 def veille_test(cfg):
