@@ -6,7 +6,7 @@
   "https://www.lagranderecre.fr/jeux-de-societe/cartes-a-collectionner/mini-tin-pokemon-30e-anniversaire.html": "in_stock"
  },
  "flyers": {
-  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "51065a039822c1e8001ec09fa24c43a1596c187b542a24c9358284bc93b9f369"
+  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "dafb5e2b349e9a92d8dcda5104da072dee2399d4179d019f14fd027c04ce4f6f"
  },
  "collections": {
   "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html": [
@@ -49,6 +49,10 @@
   "https://www.reddit.com/r/PokemonTCG/search.rss?q=restock+OR+%22back+in+stock%22&restrict_sr=on&sort=new&t=day": [
    "t3_1wxe5ml",
    "t3_1wx4wtl"
+  ],
+  "https://news.google.com/rss/search?q=pokemon+(restock+OR+r%C3%A9assort+OR+%22retour+en+stock%22)+when:7d&hl=fr&gl=FR&ceid=FR:fr": [
+   "CBMi9gFBVV95cUxPTl9yNkNOMmNKcnhWU3RFQ3hQLTNLdzY4WVd3X01MYVVLNV9hbm9uZ2NMd3IwVGhscllWaEtYZWVoZGJRX2R2TTBUbEVmQnowNk4xSi1hWklBTGszNjA5UF9QX2pEOHljbkRrSFhCRmpuVmZJLWpDeHRLN1I2by1KU1J1WkliMEk1NDM2QjZfR19HRE1TR3R5VTVQSGFNMi1COWloWmhqdmUxWGN3UXBiVFNQZ2JkSFo0WFVsSGhrMTAyY3JCX0Z0S3hsa3FSa1dQbzBDdDJLTHFBVmQwa3FfZ3lGcVZPZzNBUFJPa19CaEFLM3Y2V3c",
+   "CBMiwAFBVV95cUxQNlpfVkNmQ01JMzQwSDFFcFF0bHZ0SjAxWXp5aGIxajI0MzBDRXFxejFzRE9xZmoyZUVabHAzb0NBZ01pQmJZMWxFY3BtaE83MkwxazlyT21GNFpJUzRzOERGQkYtcVh0M0xTcUdPanJCMVFXa3RnREFpMmFWMnVOTWcwSFNwdWoyQWcyMG5PSmk0MklBWWpvaW53QndDbzJmVVZwbmF1NHFmR2dPVG5Id2xwNER5WGctaGtJR1hjSW0"
   ]
  },
  "veille_titres": {},
