@@ -1,8 +1,11 @@
 name: Surveillance Pokémon
 
+# Fonctionnement : chaque exécution surveille pendant ~52 minutes (un passage toutes les 4 min),
+# puis relance automatiquement la suivante. Le cron ci-dessous n'est qu'un filet de sécurité
+# qui redémarre la chaîne si elle s'est interrompue (le cron de GitHub est souvent en retard).
 on:
   schedule:
-    - cron: "*/15 * * * *"
+    - cron: "*/30 * * * *"
   workflow_dispatch:
     inputs:
       test:
@@ -12,6 +15,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: pokemon-watch
@@ -20,7 +24,7 @@ concurrency:
 jobs:
   watch:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 58
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -32,8 +36,15 @@ jobs:
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python watcher.py ${{ github.event.inputs.test == 'true' && '--test' || '' }}
+        run: |
+          echo "DEBUT=$(date +%s)" >> "$GITHUB_ENV"
+          if [ "${{ github.event.inputs.test }}" = "true" ]; then
+            python watcher.py --test
+          else
+            python watcher.py --duree 52 --pause 4
+          fi
       - name: Sauvegarder l'état
+        if: always()
         run: |
           git config user.name "pokemon-bot"
           git config user.email "pokemon-bot@users.noreply.github.com"
@@ -44,4 +55,14 @@ jobs:
               git pull --rebase origin main && git push && break
               sleep 5
             done
+          fi
+      - name: Relancer la surveillance
+        if: ${{ success() && github.event.inputs.test != 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Garde-fou : on ne relance que si cette session a vraiment duré (≥ 10 min),
+          # pour ne jamais s'emballer en boucle en cas de plantage immédiat.
+          if [ $(( $(date +%s) - DEBUT )) -ge 600 ]; then
+            gh workflow run watch.yml --ref "${{ github.ref_name }}"
           fi
