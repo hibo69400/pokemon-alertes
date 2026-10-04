@@ -78,3 +78,73 @@ prospectus:
     url: "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3"
   # - nom: "Prospectus Carrefour de la semaine"
   #   url: "ADRESSE DU PDF"
+
+# ── 4) VEILLE COMMUNAUTAIRE : internet, forums, réseaux sociaux ──
+# Le script lit ces sources à chaque passage et te notifie quand un NOUVEAU post parle
+# d'un restock / réassort / retour en stock Pokémon. Au tout premier passage d'une source,
+# il mémorise l'existant sans rien envoyer (pas d'avalanche), puis te prévient d'un seul
+# message « Veille activée ». Une même info vue sur plusieurs sources = une seule alerte.
+#
+# Réglages communs (tous facultatifs) :
+veille_options:
+  max_notifs_par_source: 3      # au-delà, un seul message groupé « N autres alertes »
+  # mots_restock: [...]         # un post doit contenir un de ces mots (début de mot suffit)
+  # mots_exclus: [...]          # un post contenant un de ces mots entier est ignoré
+  #                             # (par défaut : vends, wts, wtb, echange, recherche, cherche…)
+#
+# Réglages possibles par source : deja_pokemon: true (la source ne parle que de Pokémon),
+# exiger_restock: false (alerter sur TOUT post Pokémon, utile pour un canal dédié aux restocks),
+# priorite: 1 à 5, mots_restock / mots_exclus (remplacent les réglages communs).
+#
+# ⚠️ Aucune de ces adresses n'a pu être testée depuis ton dépôt. Lance d'abord le diagnostic :
+#       python watcher.py --veille-test
+# Il affiche, source par source, ce qui est lu et ce qui déclencherait une alerte
+# (sans notification ni sauvegarde). Une source en panne 3 passages de suite
+# (~45 min) te envoie une alerte « source illisible », comme pour les magasins.
+veille:
+  # — Internet en général : presse, blogs, sites spécialisés (via Google Actualités) —
+  - nom: "Web - restocks Pokémon (Google Actualités)"
+    type: rss
+    url: "https://news.google.com/rss/search?q=pokemon+(restock+OR+r%C3%A9assort+OR+%22retour+en+stock%22)+when:1d&hl=fr&gl=FR&ceid=FR:fr"
+  - nom: "Web - Pokémon 30 ans (Google Actualités)"
+    type: rss
+    url: "https://news.google.com/rss/search?q=pokemon+%2230+ans%22+(cartes+OR+coffret+OR+display)+when:1d&hl=fr&gl=FR&ceid=FR:fr"
+
+  # — Dealabs : fil de la communauté « disponibilités et réassorts Pokémon TCG » —
+  # (la page existe ; la lecture de ses commentaires par le script reste à confirmer)
+  - nom: "Dealabs - fil réassorts Pokémon TCG"
+    type: page
+    url: "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943"
+    deja_pokemon: true
+
+  # — Reddit (flux RSS de recherche). Reddit bloque parfois les serveurs GitHub (erreur 403) :
+  #   si c'est le cas, le diagnostic te le dira et tu peux supprimer ces deux blocs. —
+  - nom: "Reddit - r/PokemonTCG restock"
+    type: rss
+    url: "https://www.reddit.com/r/PokemonTCG/search.rss?q=restock+OR+%22back+in+stock%22&restrict_sr=on&sort=new&t=day"
+    deja_pokemon: true
+  - nom: "Reddit - r/PokeInvesting restock"
+    type: rss
+    url: "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day"
+    deja_pokemon: true
+
+  # — Telegram : canaux PUBLICS d'alertes restock. Je n'ai pas pu en vérifier de fiables :
+  #   trouve ceux qui t'intéressent (cherche « restock pokemon » dans Telegram), puis note le
+  #   nom après t.me/ . Il faut que https://t.me/s/NOM_DU_CANAL affiche les messages dans un
+  #   navigateur, sinon le script ne peut pas le lire. —
+  # - nom: "Telegram - NOM DU CANAL"
+  #   type: telegram
+  #   canal: "nom_du_canal"
+  #   deja_pokemon: true
+  #   exiger_restock: false      # un canal dédié aux restocks : on alerte sur tous ses posts
+
+  # — Bluesky : chaque compte a un flux RSS. Remplace par le pseudo d'un compte qui relaie les restocks —
+  # - nom: "Bluesky - NOM DU COMPTE"
+  #   type: rss
+  #   url: "https://bsky.app/profile/pseudo.bsky.social/rss"
+
+  # — X / Twitter : pas de flux gratuit stable. Seule piste : un pont RSS (RSSHub ou Nitter) que
+  #   tu héberges toi-même ou une instance publique qui tient dans la durée, par exemple :
+  # - nom: "X - NOM DU COMPTE"
+  #   type: rss
+  #   url: "https://TON-INSTANCE-RSSHUB/twitter/user/nom_du_compte"
