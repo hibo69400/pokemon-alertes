@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
-"""Alertes Pokémon : surveille le stock de produits et les prospectus,
-puis envoie une notification sur le téléphone via ntfy."""
+"""Alertes Pokémon : surveille le stock de produits, les prospectus et la veille
+communautaire (RSS, Telegram, forums), puis notifie le téléphone via ntfy."""
 import argparse
 import base64
 import hashlib
+import html as html_lib
 import json
 import os
 import re
 import time
 import unicodedata
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from urllib.parse import urldefrag, urljoin
 
@@ -62,6 +64,9 @@ def load_state():
     state.setdefault("flyers", {})
     state.setdefault("collections", {})
     state.setdefault("erreurs", {})
+    state.setdefault("veille", {})
+    state.setdefault("veille_titres", {})
+    state.setdefault("veille_echecs", {})
     return state
 
 
@@ -323,6 +328,250 @@ def run_collection(c, cfg, state):
     state["collections"][c["url"]] = sorted(known | set(products))
 
 
+# ── Veille communautaire : internet, forums, réseaux sociaux ─────
+# Trois types de sources, toutes lisibles sans clé API :
+#   rss      : flux RSS/Atom (Reddit, Google Actualités, Bluesky, blogs, forums…)
+#   telegram : canal Telegram PUBLIC (aperçu web t.me/s/<canal>)
+#   page     : n'importe quelle page web (on repère les nouvelles lignes utiles)
+DEFAULT_RESTOCK = ["restock", "reassort", "dispo", "en stock", "retour en stock", "drop",
+                   "disponible", "precommande", "pre-commande", "ouverture", "30 ans",
+                   "30th", "etb", "display", "booster", "coffret", "tin", "ultra premium"]
+DEFAULT_EXCLUS = ["vends", "vend", "wts", "wtb", "echange", "echanges", "recherche",
+                  "cherche", "estimation"]
+TAG_RE = re.compile(r"<[^>]+>")
+TG_POST_RE = re.compile(r'data-post="([^"]+)"')
+TG_TEXT_RE = re.compile(r'class="(tgme_widget_message_text[^"]*)"[^>]*>(.*?)</div>', re.S)
+
+
+def clean_html(s):
+    s = re.sub(r"<br\s*/?>|</p>|</div>|</li>|</tr>|</h\d>", "\n", s or "", flags=re.I)
+    s = html_lib.unescape(TAG_RE.sub(" ", s))
+    s = re.sub(r"[ \t\r\f\v]+", " ", s)
+    return re.sub(r"\n\s*", "\n", s).strip()
+
+
+def one_line(s):
+    return re.sub(r"\s+", " ", s or "").strip()
+
+
+def src_key(src):
+    return src.get("url") or "telegram:" + str(src.get("canal", "")).lstrip("@")
+
+
+def http_get(url, timeout=30):
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=timeout)
+    except requests.RequestException as e:
+        return None, f"erreur réseau ({type(e).__name__})"
+    if r.status_code != 200:
+        return None, f"HTTP {r.status_code} (le site bloque le script ou l'adresse est fausse)"
+    return r, None
+
+
+def _local(tag):
+    return tag.rsplit("}", 1)[-1] if isinstance(tag, str) else ""
+
+
+def parse_feed(content):
+    """RSS 2.0 ou Atom -> liste de {id, title, link, summary}. None si illisible."""
+    try:
+        root = ET.fromstring(content)
+    except ET.ParseError:
+        return None
+    items = []
+    for el in root.iter():
+        if _local(el.tag) not in ("item", "entry"):
+            continue
+        d = {"id": "", "title": "", "link": "", "summary": ""}
+        for ch in el:
+            n = _local(ch.tag)
+            if n == "title":
+                d["title"] = one_line(clean_html("".join(ch.itertext())))
+            elif n == "link":
+                href = ch.get("href")
+                if href and ch.get("rel") in (None, "alternate"):
+                    d["link"] = d["link"] or href
+                elif ch.text and ch.text.strip():
+                    d["link"] = d["link"] or ch.text.strip()
+            elif n in ("guid", "id"):
+                d["id"] = d["id"] or (ch.text or "").strip()
+            elif n in ("description", "summary", "content", "encoded"):
+                d["summary"] = d["summary"] or clean_html("".join(ch.itertext()))
+        d["id"] = d["id"] or d["link"] or d["title"]
+        if d["title"] or d["summary"]:
+            items.append(d)
+    return items
+
+
+def parse_telegram(html):
+    items, seen = [], set()
+    for part in html.split('data-post="')[1:]:
+        post = part.split('"', 1)[0]
+        if post in seen:
+            continue
+        text = ""
+        for cls, body in TG_TEXT_RE.findall(part):
+            if "reply" not in cls:          # on ignore l'aperçu du message cité
+                text = clean_html(body)
+                break
+        if not text:
+            continue
+        seen.add(post)
+        items.append({"id": post, "title": one_line(text)[:110], "summary": text,
+                      "link": f"https://t.me/{post}"})
+    return items
+
+
+def parse_page(html, url):
+    text = re.sub(r"<script.*?</script>|<style.*?</style>|<noscript.*?</noscript>", " ",
+                  html, flags=re.S | re.I)
+    items, seen = [], set()
+    for seg in clean_html(text).split("\n"):
+        seg = one_line(seg)
+        if len(seg) < 15 or seg in seen:
+            continue
+        seen.add(seg)
+        items.append({"id": hashlib.sha1(seg.encode()).hexdigest()[:16],
+                      "title": seg[:110], "summary": seg, "link": url})
+    return items
+
+
+def fetch_items(src):
+    """Retourne (items, erreur). Un flux RSS vide n'est pas une erreur."""
+    kind = src.get("type", "rss")
+    if kind == "telegram":
+        canal = str(src.get("canal", "")).lstrip("@").strip()
+        if not canal:
+            return None, "champ « canal » manquant"
+        r, err = http_get(f"https://t.me/s/{canal}")
+        if err:
+            return None, err
+        items = parse_telegram(r.text)
+        return (items, None) if items else (None, "aucun message lisible (canal privé, ou sans aperçu web public ?)")
+    if not src.get("url"):
+        return None, "champ « url » manquant"
+    r, err = http_get(src["url"])
+    if err:
+        return None, err
+    if kind == "page":
+        items = parse_page(r.text, src["url"])
+        return (items, None) if items else (None, "page vide (chargée en JavaScript ?)")
+    items = parse_feed(r.content)
+    if items is None:
+        return None, "ce n'est pas un flux RSS/Atom lisible"
+    return items, None
+
+
+def relevance(text, src, cfg):
+    """(utile, trentieme) : l'élément parle-t-il d'un restock Pokémon ?"""
+    opts = cfg.get("veille_options") or {}
+    t = norm(text)
+    if not src.get("deja_pokemon", False):
+        if not any(norm(k) in t for k in cfg.get("mots_cles", ["pokemon"])):
+            return False, False
+    for w in src.get("mots_exclus", opts.get("mots_exclus", DEFAULT_EXCLUS)):
+        if re.search(r"(?<!\w)" + re.escape(norm(w)) + r"(?!\w)", t):
+            return False, False
+    if src.get("exiger_restock", True):
+        words = src.get("mots_restock", opts.get("mots_restock", DEFAULT_RESTOCK))
+        if not any(re.search(r"(?<!\w)" + re.escape(norm(w)), t) for w in words):
+            return False, False
+    anniv = any(norm(k) in t for k in cfg.get("mots_cles_30ans", ["30 ans"]))
+    return True, anniv
+
+
+def title_hash(title):
+    return hashlib.sha1(re.sub(r"[^a-z0-9]", "", norm(title))[:80].encode()).hexdigest()[:16]
+
+
+def veille_echec(src, state, raison):
+    """Prévient une seule fois, après 3 échecs de suite (≈ 45 min), qu'une source est muette."""
+    key = src_key(src)
+    n = state["veille_echecs"].get(key, 0) + 1
+    state["veille_echecs"][key] = n
+    log(f"  {raison} (échec n°{n})")
+    if n == 3:
+        notify(f"⚠️ {src['nom']} : source illisible", f"{raison}. Cette source n'est pas surveillée pour l'instant.",
+               click=src.get("url"), priority=3, tags=["warning"])
+
+
+def run_veille_source(src, cfg, state, nouvelles):
+    key, nom = src_key(src), src["nom"]
+    opts = cfg.get("veille_options") or {}
+    items, err = fetch_items(src)
+    if err:
+        veille_echec(src, state, err)
+        return
+    state["veille_echecs"].pop(key, None)
+    seen = state["veille"].get(key)
+    first = seen is None
+    seen_set = set(seen or [])
+    new = [it for it in items if it["id"] not in seen_set]
+    current = [it["id"] for it in items]
+    cap = max(300, 2 * len(current))
+    state["veille"][key] = (current + [s for s in (seen or []) if s not in set(current)])[:cap]
+    if first:                       # 1er passage : on mémorise sans alerter
+        nouvelles.append(nom)
+        log(f"  {len(items)} éléments mémorisés (1er passage)")
+        return
+    matches = []
+    for it in new:
+        ok, anniv = relevance(it["title"] + "\n" + it["summary"], src, cfg)
+        if not ok:
+            continue
+        th = title_hash(it["title"])
+        if th in state["veille_titres"]:      # même info déjà reçue d'une autre source
+            log(f"  doublon ignoré : {it['title'][:60]}")
+            continue
+        state["veille_titres"][th] = int(time.time())
+        matches.append((it, anniv))
+    log(f"  {len(new)} nouveaux éléments, {len(matches)} utiles")
+    limit = opts.get("max_notifs_par_source", 3)
+    for it, anniv in matches[:limit]:
+        msg = it["title"]
+        if it["summary"] and not it["summary"].startswith(it["title"][:30]):
+            msg += "\n" + one_line(it["summary"])[:250]
+        notify(f"{'🔥' if anniv else '🌐'} {nom}", msg, click=it["link"] or src.get("url"),
+               priority=5 if anniv else src.get("priorite", 4), tags=["mega"])
+    if len(matches) > limit:
+        notify(f"🌐 {nom} : {len(matches) - limit} autres alertes",
+               "Trop d'alertes d'un coup, ouvre la source pour tout voir.",
+               click=src.get("url") or matches[0][0]["link"], priority=3, tags=["mega"])
+
+
+def run_veille(cfg, state):
+    cutoff = time.time() - 3 * 86400
+    state["veille_titres"] = {h: t for h, t in state["veille_titres"].items() if t > cutoff}
+    nouvelles = []
+    for src in cfg.get("veille") or []:
+        log(f"[veille] {src['nom']}")
+        run_veille_source(src, cfg, state, nouvelles)
+        time.sleep(1.5)
+    if nouvelles:
+        notify("📡 Veille communautaire activée",
+               "Sources branchées :\n" + "\n".join(nouvelles[:10]) +
+               "\nTu recevras les prochains posts sur les restocks Pokémon.",
+               priority=2, tags=["satellite"])
+
+
+def veille_test(cfg):
+    """Mode diagnostic : montre ce que chaque source renvoie et si ça déclencherait une alerte.
+    N'envoie aucune notification et n'écrit rien dans state.json."""
+    for src in cfg.get("veille") or []:
+        log(f"\n[veille] {src['nom']}  ({src.get('type', 'rss')})")
+        items, err = fetch_items(src)
+        if err:
+            log(f"  ✗ ILLISIBLE : {err}")
+            continue
+        n_ok = 0
+        for it in items[:15]:
+            ok, anniv = relevance(it["title"] + "\n" + it["summary"], src, cfg)
+            n_ok += ok
+            log(f"  {'✅' if ok else '·'} {'🔥' if anniv else '  '} {it['title'][:90]}")
+        log(f"  → {len(items)} éléments lus, {n_ok} utiles parmi les 15 premiers")
+        time.sleep(1)
+
+
 # ── Boucle principale ────────────────────────────────────────
 def run_once():
     cfg = yaml.safe_load(CONFIG_FILE.read_text(encoding="utf-8"))
@@ -353,17 +602,23 @@ def run_once():
         log(f"[prospectus] {f['nom']}")
         analyse_flyer(f, cfg, state, api_key)
         time.sleep(2)
+    run_veille(cfg, state)
     save_state(state)
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--test", action="store_true", help="envoie une notification de test")
+    ap.add_argument("--veille-test", action="store_true",
+                    help="diagnostic des sources de veille (aucune notification, rien de sauvegardé)")
     ap.add_argument("--boucle", type=int, metavar="MIN", help="relance toutes les MIN minutes")
     args = ap.parse_args()
     if args.test:
         ok = notify("✅ Test réussi", "Les notifications Pokémon arrivent bien sur ton téléphone.")
         raise SystemExit(0 if ok else 1)
+    if args.veille_test:
+        veille_test(yaml.safe_load(CONFIG_FILE.read_text(encoding="utf-8")))
+        return
     if args.boucle:
         while True:
             run_once()
