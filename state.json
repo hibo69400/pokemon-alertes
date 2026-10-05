@@ -6,7 +6,7 @@
   "https://www.lagranderecre.fr/jeux-de-societe/cartes-a-collectionner/mini-tin-pokemon-30e-anniversaire.html": "in_stock"
  },
  "flyers": {
-  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "4bd5ae40a3dedd19dd25964742e1a1f5928c4f8af78bb0c54c96f6d27f747d3b"
+  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "18b7c6200faa65cab170a80fc44ff1d7de92fac82bc93de59b66f10228250975"
  },
  "collections": {
   "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html": [
@@ -111,15 +111,15 @@
  },
  "veille_echecs": {
   "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day": 1,
-  "x:PikaCheck": 1
+  "x:PikaCheck": 8
  },
  "veille_t": {
-  "x:PikaCheck": 1791200134.2709105,
-  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1791200135.8621023,
-  "https://www.reddit.com/r/PokemonTCG/search.rss?q=restock+OR+%22back+in+stock%22&restrict_sr=on&sort=new&t=day": 1791200372.6754465,
-  "https://news.google.com/rss/search?q=pokemon+(restock+OR+r%C3%A9assort+OR+%22retour+en+stock%22)+when:7d&hl=fr&gl=FR&ceid=FR:fr": 1791200374.4368138,
-  "https://news.google.com/rss/search?q=pokemon+%2230+ans%22+(cartes+OR+coffret+OR+display)+when:1d&hl=fr&gl=FR&ceid=FR:fr": 1791200376.1948705,
-  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1791200377.944669,
-  "https://news.google.com/rss/search?q=pokemon+tabac+(cartes+OR+boosters+OR+coffrets)+when:7d&hl=fr&gl=FR&ceid=FR:fr": 1791200379.6669173
+  "x:PikaCheck": 1791203318.3988008,
+  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1791203078.106085,
+  "https://www.reddit.com/r/PokemonTCG/search.rss?q=restock+OR+%22back+in+stock%22&restrict_sr=on&sort=new&t=day": 1791203320.0371306,
+  "https://news.google.com/rss/search?q=pokemon+(restock+OR+r%C3%A9assort+OR+%22retour+en+stock%22)+when:7d&hl=fr&gl=FR&ceid=FR:fr": 1791203321.8316574,
+  "https://news.google.com/rss/search?q=pokemon+%2230+ans%22+(cartes+OR+coffret+OR+display)+when:1d&hl=fr&gl=FR&ceid=FR:fr": 1791203323.650444,
+  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1791203325.4655104,
+  "https://news.google.com/rss/search?q=pokemon+tabac+(cartes+OR+boosters+OR+coffrets)+when:7d&hl=fr&gl=FR&ceid=FR:fr": 1791203327.2448158
  }
 }
