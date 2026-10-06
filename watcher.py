@@ -12,8 +12,9 @@ import time
 import traceback
 import unicodedata
 import xml.etree.ElementTree as ET
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from urllib.parse import urldefrag, urljoin
+from urllib.parse import quote_plus, urldefrag, urljoin
 
 import requests
 import yaml
@@ -69,6 +70,7 @@ def load_state():
     state.setdefault("veille_titres", {})
     state.setdefault("veille_echecs", {})
     state.setdefault("veille_t", {})
+    state.setdefault("alertes", [])
     return state
 
 
@@ -76,8 +78,23 @@ def save_state(state):
     STATE_FILE.write_text(json.dumps(state, indent=1, ensure_ascii=False), encoding="utf-8")
 
 
-def notify(title, message, click=None, priority=4, tags=None):
+ALERTES_SESSION = []      # horodatage des alertes importantes (pour le bilan quotidien)
+
+
+def bouton(label, url):
+    """Bouton cliquable sous la notification (ouvre le site, ou l'appli si elle gère ce lien)."""
+    return {"action": "view", "label": label[:30], "url": url}
+
+
+def maps_url(requete):
+    """Lien Google Maps : s'ouvre directement dans l'appli Maps sur Android."""
+    return "https://www.google.com/maps/search/?api=1&query=" + quote_plus(requete)
+
+
+def notify(title, message, click=None, priority=4, tags=None, actions=None):
     log(f"NOTIF : {title} | {message}")
+    if priority >= 4:
+        ALERTES_SESSION.append(time.time())
     topic = os.environ.get("NTFY_TOPIC", "").strip()
     if not topic:
         log("  (NTFY_TOPIC absent : notification non envoyée)")
@@ -87,6 +104,8 @@ def notify(title, message, click=None, priority=4, tags=None):
                "priority": priority, "tags": tags or []}
     if click:
         payload["click"] = click
+    if actions:
+        payload["actions"] = [a for a in actions if a.get("url")][:3]
     try:
         requests.post(server, json=payload, timeout=20).raise_for_status()
         return True
@@ -288,6 +307,11 @@ def signale_probleme(c, state, raison):
         state["erreurs"][c["url"]] = True
 
 
+def nom_enseigne(nom):
+    """« E.Leclerc (cartes Pokémon) » -> « E.Leclerc » (pour la recherche Maps)."""
+    return re.sub(r"\s*\(.*?\)", "", nom).strip()
+
+
 def run_collection(c, cfg, state):
     ville = cfg.get("ville", "")
     try:
@@ -317,11 +341,14 @@ def run_collection(c, cfg, state):
             in_stock_now.append(name)
             if not first and prev != "in_stock":
                 notify(f"🟢 En stock : {name}", f"{c['nom']} — disponible ({ville})",
-                       click=purl, priority=5, tags=["rotating_light"])
+                       click=purl, priority=5, tags=["rotating_light"],
+                       actions=[bouton("🛒 Ouvrir le produit", purl),
+                                bouton("🗺️ Magasin près de moi", maps_url(f"{nom_enseigne(c['nom'])} {ville}"))])
         elif not first and purl not in known:
             notify(f"🆕 Nouveau produit 30 ans : {name}",
                    f"{c['nom']} — vient d'apparaître (stock non confirmé)",
-                   click=purl, priority=3, tags=["new"])
+                   click=purl, priority=3, tags=["new"],
+                   actions=[bouton("🛒 Ouvrir le produit", purl)])
         time.sleep(1.5)
     if first:
         lignes = "\n".join(in_stock_now[:8]) or "aucun détecté en stock pour l'instant"
@@ -336,10 +363,14 @@ def run_collection(c, cfg, state):
 #   telegram : canal Telegram PUBLIC (aperçu web t.me/s/<canal>)
 #   x        : compte X/Twitter public (méthode non officielle, EXPÉRIMENTALE)
 #   page     : n'importe quelle page web (on repère les nouvelles lignes utiles)
-DEFAULT_RESTOCK = ["restock", "reassort", "dispo", "en stock", "retour en stock", "drop",
-                   "disponible", "precommande", "pre-commande", "ouverture", "30 ans",
-                   "30th", "etb", "display", "booster", "coffret", "tin", "ultra premium",
-                   "tabac", "buraliste", "maison de la presse"]
+# Mots qui disent qu'un stock bouge (début de mot suffisant : « reassort » couvre « reassorts »)
+DEFAULT_RESTOCK = ["restock", "reassort", "arrivage", "dispo", "en stock", "retour en stock",
+                   "drop", "disponible", "en rayon"]
+# Mots qui parlent d'un restock / d'une sortie À VENIR
+DEFAULT_FUTUR = ["prochain restock", "prochain reassort", "prochain arrivage", "prochaine vague",
+                 "a venir", "prevu", "precommande", "pre-commande", "date de sortie",
+                 "sortie le", "sortira", "sera disponible", "bientot", "decale", "reporte",
+                 "calendrier", "ouverture des precommandes", "arrivera"]
 DEFAULT_EXCLUS = ["vends", "vend", "wts", "wtb", "echange", "echanges", "recherche",
                   "cherche", "estimation"]
 TAG_RE = re.compile(r"<[^>]+>")
@@ -535,25 +566,48 @@ def zone_match(text, cfg):
     return 0, None
 
 
+def _mot_debut(w, t):
+    return re.search(r"(?<!\w)" + re.escape(w), t)
+
+
+def _mot_entier(w, t):
+    return re.search(r"(?<!\w)" + re.escape(w) + r"(?!\w)", t)
+
+
+def enseigne_match(text, cfg):
+    """Première enseigne « de chez toi » (liste zone.enseignes) citée dans le texte."""
+    t = znorm(text)
+    for e in (cfg.get("zone") or {}).get("enseignes") or []:
+        if _mot_entier(znorm(e), t):
+            return e
+    return None
+
+
 def relevance(text, src, cfg):
-    """Un post parle-t-il d'un restock Pokémon ? Retourne {ok, anniv, zone, zone_mot}."""
-    res = {"ok": False, "anniv": False, "zone": 0, "zone_mot": None}
+    """Un post vaut-il une notification ?
+    Il faut : Pokémon + un mot de stock OU de sortie à venir, puis (mode ciblé, par défaut)
+    au moins l'un de : une commune de ta zone, une enseigne de ta liste, ou un restock À VENIR.
+    Retourne {ok, anniv, zone, zone_mot, enseigne, futur}."""
+    res = {"ok": False, "anniv": False, "zone": 0, "zone_mot": None, "enseigne": None, "futur": False}
     opts = cfg.get("veille_options") or {}
     t = norm(text)
     if not src.get("deja_pokemon", False):
         if not any(norm(k) in t for k in cfg.get("mots_cles", ["pokemon"])):
             return res
     for w in src.get("mots_exclus", opts.get("mots_exclus", DEFAULT_EXCLUS)):
-        if re.search(r"(?<!\w)" + re.escape(norm(w)) + r"(?!\w)", t):
+        if _mot_entier(norm(w), t):
             return res
-    if src.get("exiger_restock", True):
-        words = src.get("mots_restock", opts.get("mots_restock", DEFAULT_RESTOCK))
-        if not any(re.search(r"(?<!\w)" + re.escape(norm(w)), t) for w in words):
-            return res
+    stock = any(_mot_debut(norm(w), t) for w in src.get("mots_restock", opts.get("mots_restock", DEFAULT_RESTOCK)))
+    futur = any(_mot_debut(norm(w), t) for w in src.get("mots_futur", opts.get("mots_futur", DEFAULT_FUTUR)))
+    if src.get("exiger_restock", True) and not (stock or futur):
+        return res
     zone, mot = zone_match(text, cfg)
+    enseigne = enseigne_match(text, cfg)
+    if src.get("ciblage", opts.get("ciblage", True)) and not (zone or enseigne or futur):
+        return res            # restock sans lien avec chez toi et sans rien d'à venir : on ignore
     if zone == 0 and src.get("zone_stricte", opts.get("zone_stricte", False)):
         return res
-    res.update(ok=True, zone=zone, zone_mot=mot,
+    res.update(ok=True, zone=zone, zone_mot=mot, enseigne=enseigne, futur=futur,
                anniv=any(norm(k) in t for k in cfg.get("mots_cles_30ans", ["30 ans"])))
     return res
 
@@ -613,16 +667,25 @@ def run_veille_source(src, cfg, state, nouvelles):
     log(f"  {len(new)} nouveaux éléments, {len(matches)} utiles")
     matches.sort(key=lambda m: -m[1]["zone"])     # les alertes proches de chez toi d'abord
     limit = opts.get("max_notifs_par_source", 3)
+    ville = cfg.get("ville", "")
     for it, rel in matches[:limit]:
         msg = it["title"]
         if it["summary"] and not it["summary"].startswith(it["title"][:30]):
             msg += "\n" + one_line(it["summary"])[:250]
         if rel["zone"]:
             msg += f"\n📍 zone : {rel['zone_mot']}"
-        emoji = ("📍" if rel["zone"] == 2 else "") + ("🔥" if rel["anniv"] else "")
-        prio = 5 if (rel["anniv"] or rel["zone"] == 2) else 4 if rel["zone"] == 1 else src.get("priorite", 3)
-        notify(f"{emoji or '🌐'} {nom}", msg, click=it["link"] or src_link(src),
-               priority=prio, tags=["mega"])
+        if rel["enseigne"]:
+            msg += f"\n🏪 enseigne : {rel['enseigne']}"
+        if rel["futur"]:
+            msg += "\n🔮 annonce à venir"
+        emoji = ("📍" if rel["zone"] == 2 else "") + ("🏪" if rel["enseigne"] and rel["zone"] != 2 else "") \
+            + ("🔮" if rel["futur"] else "") + ("🔥" if rel["anniv"] else "")
+        prio = 5 if (rel["zone"] == 2 or (rel["anniv"] and (rel["enseigne"] or rel["zone"]))) else src.get("priorite", 4)
+        lien = it["link"] or src_link(src)
+        boutons = [bouton("🔗 Ouvrir", lien)]
+        if rel["enseigne"]:
+            boutons.append(bouton(f"🗺️ {rel['enseigne']} près de moi", maps_url(f"{rel['enseigne']} {ville}")))
+        notify(f"{emoji or '🌐'} {nom}", msg, click=lien, priority=prio, tags=["mega"], actions=boutons)
     if len(matches) > limit:
         notify(f"🌐 {nom} : {len(matches) - limit} autres alertes",
                "Trop d'alertes d'un coup, ouvre la source pour tout voir.",
@@ -633,6 +696,10 @@ def run_veille_source(src, cfg, state, nouvelles):
 def run_veille(cfg, state):
     cutoff = time.time() - 3 * 86400
     state["veille_titres"] = {h: t for h, t in state["veille_titres"].items() if t > cutoff}
+    actives = {src_key(v) for v in cfg.get("veille") or []}
+    for k in [k for k in state["veille"] if k not in actives]:     # sources retirées de la config
+        for d in (state["veille"], state["veille_t"], state["veille_echecs"]):
+            d.pop(k, None)
     nouvelles = []
     for src in cfg.get("veille") or []:
         log(f"[veille] {src['nom']}")
@@ -660,10 +727,77 @@ def veille_test(cfg):
             rel = relevance(it["title"] + "\n" + it["summary"], src, cfg)
             n_ok += rel["ok"]
             mark = ("✅" if rel["ok"] else "·") + ("📍" if rel["zone"] == 2 else "🗺️" if rel["zone"] else "  ") \
-                + ("🔥" if rel["anniv"] else "  ")
+                + ("🏪" if rel["enseigne"] else "  ") + ("🔮" if rel["futur"] else "  ") + ("🔥" if rel["anniv"] else "  ")
             log(f"  {mark} {it['title'][:90]}")
         log(f"  → {len(items)} éléments lus, {n_ok} utiles parmi les 15 premiers")
         time.sleep(1)
+
+
+# ── Bilan quotidien et diagnostic ──────────────────────────────
+def maintenant_paris():
+    try:
+        from zoneinfo import ZoneInfo
+        return datetime.now(ZoneInfo("Europe/Paris"))
+    except Exception:
+        return datetime.now(timezone(timedelta(hours=2)))
+
+
+def etat_sources(cfg, state):
+    """(veille_total, veille_en_erreur[noms], magasins_en_erreur[noms])"""
+    veille = cfg.get("veille") or []
+    v_err = [v["nom"] for v in veille if state["veille_echecs"].get(src_key(v), 0) >= 2]
+    m_err = [c["nom"] for c in cfg.get("collections") or [] if state["erreurs"].get(c["url"])]
+    return len(veille), v_err, m_err
+
+
+def bilan_quotidien(cfg, state):
+    """Une notification par jour (à partir de 8 h) : preuve que la surveillance tourne."""
+    if not cfg.get("bilan_quotidien", True):
+        return
+    now = maintenant_paris()
+    jour = now.strftime("%Y-%m-%d")
+    if now.hour < 8 or state.get("bilan_date") == jour:
+        return
+    total, v_err, m_err = etat_sources(cfg, state)
+    n24 = len([t for t in state["alertes"] if t > time.time() - 86400])
+    lignes = [f"Alertes envoyées ces 24 h : {n24}",
+              f"Sources communautaires lues : {total - len(v_err)}/{total}"]
+    if v_err:
+        lignes.append("En erreur : " + ", ".join(v_err))
+    if m_err:
+        lignes.append(f"Magasins illisibles : {len(m_err)} (voir le journal Actions)")
+    if notify("✅ La surveillance tourne", "\n".join(lignes), priority=3, tags=["white_check_mark"]):
+        state["bilan_date"] = jour
+
+
+def diagnostic(cfg):
+    """Teste chaque magasin et chaque source, et envoie le résultat sur le téléphone.
+    N'écrit rien dans state.json."""
+    magasins, veille = [], []
+    for c in cfg.get("collections") or []:
+        log(f"[diagnostic] {c['nom']}")
+        r, err = http_get(c["url"])
+        if err:
+            magasins.append(f"✗ {c['nom']} : {err[:48]}")
+        else:
+            n = len(extract_products(r.text, c["url"], cfg, c.get("deja_pokemon", False)))
+            magasins.append(f"✓ {c['nom']} : {n} produit(s) 30 ans" if n
+                            else f"✗ {c['nom']} : page lue, aucun produit (JavaScript ?)")
+        time.sleep(1)
+    for src in cfg.get("veille") or []:
+        log(f"[diagnostic] {src['nom']}")
+        items, err = fetch_items(src)
+        if err:
+            veille.append(f"✗ {src['nom']} : {err[:48]}")
+        else:
+            n_ok = sum(relevance(i["title"] + "\n" + i["summary"], src, cfg)["ok"] for i in items)
+            veille.append(f"✓ {src['nom']} : {len(items)} lus, {n_ok} utiles")
+        time.sleep(1)
+    texte = "COMMUNAUTÉ\n" + "\n".join(veille) + "\n\nMAGASINS\n" + "\n".join(magasins)
+    log("\n" + texte)
+    ok = sum(l.startswith("✓") for l in veille + magasins)
+    notify(f"🩺 Diagnostic : {ok}/{len(veille) + len(magasins)} sources OK", texte[:3800],
+           priority=3, tags=["stethoscope"])
 
 
 # ── Boucle principale ────────────────────────────────────────
@@ -682,7 +816,10 @@ def run_once():
             if status == "in_stock" and prev != "in_stock":
                 notify(f"🟢 En stock : {p['nom']}",
                        f"{p.get('enseigne', '')} — disponible maintenant ({cfg.get('ville', '')})",
-                       click=p["url"], priority=5, tags=["rotating_light"])
+                       click=p["url"], priority=5, tags=["rotating_light"],
+                       actions=[bouton("🛒 Ouvrir le produit", p["url"]),
+                                bouton("🗺️ Magasin près de moi",
+                                       maps_url(f"{p.get('enseigne') or p['nom']} {cfg.get('ville', '')}"))])
         time.sleep(2)
     for c in cfg.get("collections") or []:
         if "example.com" in c["url"]:
@@ -697,12 +834,18 @@ def run_once():
         analyse_flyer(f, cfg, state, api_key)
         time.sleep(2)
     run_veille(cfg, state)
+    limite = time.time() - 86400
+    state["alertes"] = [t for t in state["alertes"] + ALERTES_SESSION if t > limite]
+    ALERTES_SESSION.clear()
+    bilan_quotidien(cfg, state)
     save_state(state)
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--test", action="store_true", help="envoie une notification de test")
+    ap.add_argument("--diagnostic", action="store_true",
+                    help="teste magasins et sources, envoie le résultat sur le téléphone")
     ap.add_argument("--veille-test", action="store_true",
                     help="diagnostic des sources de veille (aucune notification, rien de sauvegardé)")
     ap.add_argument("--boucle", type=int, metavar="MIN", help="relance toutes les MIN minutes")
@@ -714,6 +857,9 @@ def main():
     if args.test:
         ok = notify("✅ Test réussi", "Les notifications Pokémon arrivent bien sur ton téléphone.")
         raise SystemExit(0 if ok else 1)
+    if args.diagnostic:
+        diagnostic(yaml.safe_load(CONFIG_FILE.read_text(encoding="utf-8")))
+        return
     if args.veille_test:
         veille_test(yaml.safe_load(CONFIG_FILE.read_text(encoding="utf-8")))
         return
