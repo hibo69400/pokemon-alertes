@@ -12,13 +12,18 @@ on:
         description: "Envoyer seulement une notification de test"
         type: boolean
         default: false
+      diagnostic:
+        description: "Diagnostic : teste chaque source et envoie le résultat sur ton téléphone"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
   actions: write
 
+# Les tests manuels ont leur propre file : ils ne sont pas bloqués derrière la session de 52 min.
 concurrency:
-  group: pokemon-watch
+  group: ${{ (github.event.inputs.test == 'true' || github.event.inputs.diagnostic == 'true') && 'pokemon-manuel' || 'pokemon-watch' }}
   cancel-in-progress: false
 
 jobs:
@@ -40,11 +45,13 @@ jobs:
           echo "DEBUT=$(date +%s)" >> "$GITHUB_ENV"
           if [ "${{ github.event.inputs.test }}" = "true" ]; then
             python watcher.py --test
+          elif [ "${{ github.event.inputs.diagnostic }}" = "true" ]; then
+            python watcher.py --diagnostic
           else
             python watcher.py --duree 52 --pause 4
           fi
       - name: Sauvegarder l'état
-        if: always()
+        if: ${{ always() && github.event.inputs.test != 'true' && github.event.inputs.diagnostic != 'true' }}
         run: |
           git config user.name "pokemon-bot"
           git config user.email "pokemon-bot@users.noreply.github.com"
@@ -57,7 +64,7 @@ jobs:
             done
           fi
       - name: Relancer la surveillance
-        if: ${{ success() && github.event.inputs.test != 'true' }}
+        if: ${{ success() && github.event.inputs.test != 'true' && github.event.inputs.diagnostic != 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
