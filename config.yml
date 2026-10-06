@@ -3,6 +3,7 @@
 # ─────────────────────────────────────────────────────────────
 
 ville: "Villefranche-sur-Saône"   # sert d'étiquette dans les notifications
+bilan_quotidien: true             # 1 notification par jour (dès 8 h) : « la surveillance tourne » + état des sources
 
 # Un texte est lié à Pokémon s'il contient un de ces mots (accents/majuscules ignorés)
 mots_cles: ["pokemon"]
@@ -79,17 +80,17 @@ prospectus:
   # - nom: "Prospectus Carrefour de la semaine"
   #   url: "ADRESSE DU PDF"
 
-# ── 4) VEILLE COMMUNAUTAIRE : internet, forums, réseaux sociaux ──
-# Le script lit ces sources en continu et te notifie quand un NOUVEAU post parle d'un
-# restock / réassort / retour en stock Pokémon (tabacs et maisons de la presse compris).
-# Au tout premier passage d'une source, il mémorise l'existant sans rien envoyer, puis te
-# prévient d'un seul message « Veille activée ». Même info vue sur plusieurs sources = une
-# seule alerte.
-#
-# 📍 ZONE : un post qui cite une de ces communes (ou un de ces codes postaux) reçoit un 📍,
-# la priorité maximale, et passe en premier. « large » = priorité haute sans être max.
-# Un post sans lieu (restock en ligne, par exemple) est alerté normalement, sauf si tu mets
-# zone_stricte: true plus bas (alors SEULS les posts qui citent un lieu ci-dessous passent).
+# ── 4) VEILLE : sources FIABLES sur les restocks près de chez toi et à venir ──
+# Philosophie : peu de sources, bien choisies, et un filtre strict. Tu n'es alerté que si un
+# nouveau texte parle de Pokémon ET d'un mouvement de stock (restock, réassort, arrivage,
+# dispo…) ou d'une sortie à venir (prochaine vague, précommande, date décalée…) ET, en plus,
+# cite l'un de ces éléments :
+#   📍 une commune de ta zone (liste « proche » / « large » ci-dessous)
+#   🏪 une enseigne de ta liste « enseignes » (celles qui ont des magasins près de toi)
+#   🔮 une annonce À VENIR (prochain restock, précommande, sortie décalée…)
+# Tout le reste (restock américain, vente en ligne, discussions…) est ignoré.
+# Au 1er passage d'une source, le script mémorise l'existant sans rien envoyer, puis envoie
+# un seul message « Veille activée ». Même info vue sur 2 sources = une seule alerte.
 zone:
   proche:
     - "Villefranche"
@@ -131,94 +132,89 @@ zone:
     - "Villars-les-Dombes"
     - "Bourg-en-Bresse"
     - "Mâcon"
+  # Enseignes qui ont des magasins dans ta région. Les vendeurs 100 % en ligne (Amazon,
+  # Cdiscount, Pokémon Center…) n'y sont volontairement pas : ils ne t'intéressent pas ici.
+  enseignes:
+    - "Leclerc"
+    - "E.Leclerc"
+    - "Auchan"
+    - "Carrefour"
+    - "Intermarché"
+    - "Super U"
+    - "Hyper U"
+    - "Cultura"
+    - "Fnac"
+    - "King Jouet"
+    - "JouéClub"
+    - "La Grande Récré"
+    - "Micromania"
+    - "Maison de la Presse"
+    - "tabac"
+    - "tabacs"
+    - "buraliste"
 
 # Réglages communs (tous facultatifs) :
 veille_options:
+  ciblage: true                 # false = alerter sur tout post de stock Pokémon (beaucoup plus de bruit)
   max_notifs_par_source: 3      # au-delà, un seul message groupé « N autres alertes »
-  intervalle_min: 3             # minutes minimum entre deux lectures d'une même source
-  zone_stricte: false           # true = n'alerter QUE les posts qui citent un lieu de « zone »
-  # mots_restock: [...]         # un post doit contenir un de ces mots (début de mot suffit)
+  intervalle_min: 10            # minutes minimum entre deux lectures d'une même source
+  zone_stricte: false           # true = n'alerter QUE les posts qui citent une commune de ta zone
+  # mots_restock: [...]         # mots de « stock qui bouge » (début de mot suffit)
+  # mots_futur: [...]           # mots de « restock / sortie à venir »
   # mots_exclus: [...]          # un post contenant un de ces mots entier est ignoré
   #                             # (par défaut : vends, wts, wtb, echange, recherche, cherche…)
 #
 # Réglages possibles par source : deja_pokemon: true (la source ne parle que de Pokémon),
-# exiger_restock: false (alerter sur TOUT post Pokémon, utile pour un canal dédié aux restocks),
-# zone_stricte: true/false, intervalle_min, priorite (1 à 5), mots_restock / mots_exclus.
+# exiger_restock: false, ciblage: false, zone_stricte, intervalle_min, priorite (1 à 5).
 #
-# ⚠️ Beaucoup de ces adresses n'ont pas pu être testées. Lance le diagnostic :
-#       python watcher.py --veille-test
-# Il affiche, source par source, ce qui est lu et ce qui déclencherait une alerte
-# (✅ = alerte, 📍 = zone proche, 🔥 = 30 ans), sans notification ni sauvegarde.
-# Une source en panne 3 lectures de suite te envoie une alerte « source illisible ».
+# ⚠️ Ces adresses n'ont pas pu être lues depuis ton dépôt : je les ai trouvées par recherche.
+# Teste-les : Actions → Surveillance Pokémon → Run workflow → coche « Diagnostic ».
+# Tu reçois sur ton téléphone la liste des sources qui marchent (✓) et de celles qui échouent (✗).
 veille:
-  # — Communautés / influenceurs français qui lancent des alertes restock —
-  # Pikacheck (boutique + alertes gratuites sur X et Discord). Lecture de X = méthode non
-  # officielle, EXPÉRIMENTALE : si le diagnostic dit « aucun tweet lisible », supprime ce bloc.
-  - nom: "X - Pikacheck (alertes restock)"
-    type: x
-    compte: "PikaCheck"
+  # — Suivi des restocks 30 ans, avec les arrivages en magasin signalés par la communauté
+  #   (tabacs, maisons de la presse, grandes surfaces). Page mise à jour régulièrement. —
+  - nom: "PokéDrop - restocks Pokémon 30 ans"
+    type: page
+    url: "https://pokedrop.fr/restock-pokemon-30-ans/"
     deja_pokemon: true
-    intervalle_min: 5
 
-  # Dealabs : fil de la communauté « disponibilités et réassorts Pokémon TCG »
-  # (la page existe ; la lecture de ses commentaires reste incertaine : ils se chargent
-  #  sans doute en JavaScript. Dealabs a aussi une fonction « Créer une alerte » dans son
-  #  appli : active-la sur le mot « pokémon » en complément.)
+  # — Calendrier officiel : prochaines vagues de sortie (30 oct : decks ; 6 nov : Ultra-Premium…).
+  #   Pokécardex est LA référence française des cartes ; ce sujet est mis à jour quand une date
+  #   change (ex. une sortie décalée). —
+  - nom: "Pokécardex - calendrier des produits 30e Anniversaire"
+    type: page
+    url: "https://www.pokecardex.com/forums/viewtopic.php?t=50316"
+    deja_pokemon: true
+    intervalle_min: 30
+
+  # — Dealabs : fil de la communauté « disponibilités et réassorts Pokémon TCG ».
+  #   (Les commentaires se chargent peut-être en JavaScript : le diagnostic te dira ce qui est lu.) —
   - nom: "Dealabs - fil réassorts Pokémon TCG"
     type: page
     url: "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943"
     deja_pokemon: true
     intervalle_min: 10
 
-  # Reddit (flux RSS de recherche). Un seul flux : Reddit refuse (erreur 429) deux requêtes de suite.
-  - nom: "Reddit - r/PokemonTCG restock"
-    type: rss
-    url: "https://www.reddit.com/r/PokemonTCG/search.rss?q=restock+OR+%22back+in+stock%22&restrict_sr=on&sort=new&t=day"
-    deja_pokemon: true
-    intervalle_min: 15
-
-  # — Internet en général : presse, blogs, sites spécialisés (via Google Actualités) —
-  - nom: "Web - restocks Pokémon (Google Actualités)"
-    type: rss
-    url: "https://news.google.com/rss/search?q=pokemon+(restock+OR+r%C3%A9assort+OR+%22retour+en+stock%22)+when:7d&hl=fr&gl=FR&ceid=FR:fr"
-    intervalle_min: 8
-  - nom: "Web - Pokémon 30 ans (Google Actualités)"
-    type: rss
-    url: "https://news.google.com/rss/search?q=pokemon+%2230+ans%22+(cartes+OR+coffret+OR+display)+when:1d&hl=fr&gl=FR&ceid=FR:fr"
-    intervalle_min: 8
-
-  # — Local : presse du secteur et tabacs —
-  # Les tabacs n'ont pas de site à surveiller : on ne les repère que par les posts
-  # des communautés et par la presse locale (Le Progrès, etc.).
-  - nom: "Local - Pokémon cartes Villefranche / Beaujolais"
+  # — Presse locale (secteur Villefranche / Beaujolais), via Google Actualités.
+  #   Rare mais fiable : n'alerte que si l'article cite ta zone. —
+  - nom: "Presse locale - Pokémon Villefranche / Beaujolais"
     type: rss
     url: "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr"
     exiger_restock: false
-    intervalle_min: 15
-  - nom: "Tabacs - cartes Pokémon (Google Actualités)"
-    type: rss
-    url: "https://news.google.com/rss/search?q=pokemon+tabac+(cartes+OR+boosters+OR+coffrets)+when:7d&hl=fr&gl=FR&ceid=FR:fr"
-    exiger_restock: false
-    intervalle_min: 15
+    zone_stricte: true
+    intervalle_min: 30
 
-  # — Telegram : canaux PUBLICS d'alertes restock. Je n'ai pas pu en vérifier de fiables :
-  #   trouve ceux qui t'intéressent (cherche « restock pokemon » dans Telegram), puis note le
-  #   nom après t.me/ . Il faut que https://t.me/s/NOM_DU_CANAL affiche les messages dans un
-  #   navigateur, sinon le script ne peut pas le lire. —
+  # ── Désactivées volontairement (trop de bruit ou pas assez fiables) ──
+  # Reddit : retiré, il envoyait des posts hors sujet (restocks américains, etc.).
+  # X / Pikacheck : lecture non officielle de X, fiabilité non démontrée. À réactiver si tu veux :
+  # - nom: "X - Pikacheck (alertes restock)"
+  #   type: x
+  #   compte: "PikaCheck"
+  #   deja_pokemon: true
+  #
+  # Telegram : si tu trouves un canal de restock FR fiable, copie ce modèle.
+  #   (https://t.me/s/NOM_DU_CANAL doit afficher les messages dans un navigateur.)
   # - nom: "Telegram - NOM DU CANAL"
   #   type: telegram
   #   canal: "nom_du_canal"
   #   deja_pokemon: true
-  #   exiger_restock: false      # un canal dédié aux restocks : on alerte sur tous ses posts
-  #   intervalle_min: 4
-
-  # — Autre compte X (même méthode expérimentale que Pikacheck) —
-  # - nom: "X - NOM DU COMPTE"
-  #   type: x
-  #   compte: "pseudo_sans_arobase"
-  #   deja_pokemon: true
-
-  # — Bluesky : chaque compte a un flux RSS —
-  # - nom: "Bluesky - NOM DU COMPTE"
-  #   type: rss
-  #   url: "https://bsky.app/profile/pseudo.bsky.social/rss"
