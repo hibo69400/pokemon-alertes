@@ -6,7 +6,7 @@
   "https://www.lagranderecre.fr/jeux-de-societe/cartes-a-collectionner/mini-tin-pokemon-30e-anniversaire.html": "in_stock"
  },
  "flyers": {
-  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "4f9893deec7e84a5e6cb44280c406e0743694fd0bb89989aacc3d2f200cb180b",
+  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "5d7e227de33feb880650fe591ca5dde93578e559b045a76cf0660be727a462e3",
   "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3#extraits": "5c1b29ee2d414c4689405f285cb1b360a4522a40d2e9e35dc09def6345a566c2"
  },
  "collections": {
@@ -257,6 +257,7 @@
    "aa1739014e31d7bb",
    "8fca04ddd08802c8",
    "ee51d70f8fc85694",
+   "6117372ce0a7942f",
    "f10ccc787f3bb83e",
    "a5c323ddf40b8bee",
    "88a8937dac933acb",
@@ -426,16 +427,20 @@
    "65b30442d9f0aa14"
   ]
  },
- "veille_titres": {},
+ "veille_titres": {
+  "3db633cb3c0793f0": 1792670334
+ },
  "veille_echecs": {
   "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day": 1
  },
  "veille_t": {
-  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1792669303.0352757,
-  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1792668348.9056993,
-  "https://pokedrop.fr/restock-pokemon-30-ans/": 1792669063.5138545,
-  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1792668346.6380277
+  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1792672255.4471781,
+  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1792672257.5605316,
+  "https://pokedrop.fr/restock-pokemon-30-ans/": 1792672012.7914553,
+  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1792672253.1063423
  },
- "alertes": [],
+ "alertes": [
+  1792670334.5984235
+ ],
  "bilan_date": "2026-10-22"
 }
