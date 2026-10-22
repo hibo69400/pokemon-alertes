@@ -6,7 +6,7 @@
   "https://www.lagranderecre.fr/jeux-de-societe/cartes-a-collectionner/mini-tin-pokemon-30e-anniversaire.html": "in_stock"
  },
  "flyers": {
-  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "26b98d123606e62c65dfd93ecf1bcd379e32f99154b6eef1a0f047e401f0cfb0",
+  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "073cd12b5e2981ee665d9424de558a6769fa022c420832ec28d063bf99f0db2e",
   "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3#extraits": "5c1b29ee2d414c4689405f285cb1b360a4522a40d2e9e35dc09def6345a566c2"
  },
  "collections": {
@@ -429,13 +429,13 @@
  "veille_titres": {},
  "veille_echecs": {
   "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day": 1,
-  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 28
+  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 30
  },
  "veille_t": {
-  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1792639835.4564219,
-  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1792638874.7082207,
-  "https://pokedrop.fr/restock-pokemon-30-ans/": 1792639832.5628655,
-  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1792638872.7800403
+  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1792642776.689239,
+  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1792642778.863321,
+  "https://pokedrop.fr/restock-pokemon-30-ans/": 1792642771.612763,
+  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1792642774.601138
  },
  "alertes": [],
  "bilan_date": "2026-10-21"
