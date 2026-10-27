@@ -6,7 +6,7 @@
   "https://www.lagranderecre.fr/jeux-de-societe/cartes-a-collectionner/mini-tin-pokemon-30e-anniversaire.html": "in_stock"
  },
  "flyers": {
-  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "105c16016287905a3ddf87f0dd931fed7d69085acd3bc83132c1b68de0f7ce31",
+  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "a4c04aa502c877b86dc91181f6452e7f3c5ce09dcdc98e4b8bbfbac6cd635c11",
   "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3#extraits": "5c1b29ee2d414c4689405f285cb1b360a4522a40d2e9e35dc09def6345a566c2"
  },
  "collections": {
@@ -263,7 +263,7 @@
    "7ef7f8ffa065caed",
    "633fe38aa47619d8",
    "86f0539894f46c18",
-   "8ca5aa1e79767499",
+   "ea77fae2b9abc605",
    "89845ae57acc7778",
    "57ca4f249e22ad28",
    "25539a8be8636913",
@@ -400,6 +400,7 @@
    "91eabe5a53582006",
    "02c732f80fc81545",
    "893146766d122f40",
+   "8ca5aa1e79767499",
    "d2c79bafb4dbf100",
    "7a264fa9565422e0",
    "20ef90999c11f686",
@@ -448,13 +449,14 @@
  },
  "veille_titres": {},
  "veille_echecs": {
-  "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day": 1
+  "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day": 1,
+  "https://pokedrop.fr/restock-pokemon-30-ans/": 1
  },
  "veille_t": {
-  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1793093584.840837,
-  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1793092623.3447797,
-  "https://pokedrop.fr/restock-pokemon-30-ans/": 1793093581.531674,
-  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1793092621.2366478
+  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1793096555.2730656,
+  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1793096557.3598495,
+  "https://pokedrop.fr/restock-pokemon-30-ans/": 1793096521.472016,
+  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1793096553.3310304
  },
  "alertes": [],
  "bilan_date": "2026-10-27"
