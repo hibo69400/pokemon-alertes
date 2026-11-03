@@ -7,7 +7,7 @@
   "https://www.auchan.fr/pokemon-boite-d-entrainement-elite-30e-anniversaire/pr-48e3cb7e-6b54-447f-a4a0-66175cf3cfb9": "in_stock"
  },
  "flyers": {
-  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "b9acf6618407830065440dbcc4b9a244bef0193c36df32f5c52c1da6da5fc0c7",
+  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "d62766829586b55ce498f29d095531cf4a9436bf49a151a2446d975b897c2b53",
   "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3#extraits": "5c1b29ee2d414c4689405f285cb1b360a4522a40d2e9e35dc09def6345a566c2"
  },
  "collections": {
@@ -324,7 +324,7 @@
    "bfa60e5f27a0c2b2",
    "03fec744b81be605",
    "ef08bea40854f29a",
-   "4759c708f6aa804b",
+   "0f7eef1c3d3d8e1b",
    "78e7c4c2b05601b4",
    "68a00be59b28127d",
    "e012b34cf06df1d9",
@@ -406,6 +406,7 @@
    "91eabe5a53582006",
    "02c732f80fc81545",
    "893146766d122f40",
+   "4759c708f6aa804b",
    "b07ccadf7e84fba4",
    "3b5b43abf9657944",
    "2222abf0aa5e4590",
@@ -474,10 +475,10 @@
   "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day": 1
  },
  "veille_t": {
-  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1793721062.71748,
-  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1793721064.7947066,
-  "https://pokedrop.fr/restock-pokemon-30-ans/": 1793721057.7928085,
-  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1793721060.429356
+  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1793724030.3049455,
+  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1793723046.017417,
+  "https://pokedrop.fr/restock-pokemon-30-ans/": 1793724003.70901,
+  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1793723044.0122166
  },
  "alertes": [],
  "bilan_date": "2026-11-03"
