@@ -7,7 +7,7 @@
   "https://www.auchan.fr/pokemon-boite-d-entrainement-elite-30e-anniversaire/pr-48e3cb7e-6b54-447f-a4a0-66175cf3cfb9": "in_stock"
  },
  "flyers": {
-  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "c1c8a92427aedeebd9c54591f35b2fc5b015954b27713cbd782385d27ad9cd52",
+  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "59df206d5a5bf536383fda1a1af0ce702c662844e41445c1688a63de4a50d114",
   "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3#extraits": "5c1b29ee2d414c4689405f285cb1b360a4522a40d2e9e35dc09def6345a566c2"
  },
  "collections": {
@@ -32,6 +32,7 @@
   "https://www.carrefour.fr/s?q=pokemon+30+ans": true,
   "https://www.intermarche.com/recherche/pokemon%2030%20ans": true,
   "https://www.coursesu.com/recherche?q=pokemon+30+ans": true,
+  "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html": true,
   "https://www.auchan.fr/marques/pokemon/ca-55409": true
  },
  "veille": {
@@ -475,10 +476,10 @@
   "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day": 1
  },
  "veille_t": {
-  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1793762340.0174832,
-  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1793762342.1567373,
-  "https://pokedrop.fr/restock-pokemon-30-ans/": 1793762335.4022992,
-  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1793762338.1676636
+  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1793765273.9453132,
+  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1793764311.866508,
+  "https://pokedrop.fr/restock-pokemon-30-ans/": 1793765271.2570915,
+  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1793764309.845965
  },
  "alertes": [],
  "bilan_date": "2026-11-03"
