@@ -8,7 +8,7 @@
   "https://www.auchan.fr/pokemon-pokemon-coffret-dresseur-elite-25eme-anniversaire/pr-C1433025": "in_stock"
  },
  "flyers": {
-  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "dbcace4d0066bc287b3bc8c2ac38724782fca3ee9b0c3b96a61ffdefbedeec1c",
+  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "7ad0336414ce7558bc90665c57989d2225bf666796fb2a5513ed94ee30164b28",
   "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3#extraits": "5c1b29ee2d414c4689405f285cb1b360a4522a40d2e9e35dc09def6345a566c2"
  },
  "collections": {
@@ -505,13 +505,14 @@
  },
  "veille_titres": {},
  "veille_echecs": {
-  "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day": 1
+  "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day": 1,
+  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 2
  },
  "veille_t": {
-  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1794273084.7636871,
-  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1794272125.039766,
-  "https://pokedrop.fr/restock-pokemon-30-ans/": 1794273081.8225086,
-  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1794272122.6300275
+  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1794276033.798889,
+  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1794276035.8916273,
+  "https://pokedrop.fr/restock-pokemon-30-ans/": 1794276028.8257523,
+  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1794276031.6470487
  },
  "alertes": [
   1794223469.1478636
