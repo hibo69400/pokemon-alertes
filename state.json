@@ -5,10 +5,10 @@
   "https://www.lagranderecre.fr/jeux-de-societe/cartes-a-collectionner/-6-boosters-pokemon-30e-anniversaire.html": "in_stock",
   "https://www.lagranderecre.fr/jeux-de-societe/cartes-a-collectionner/mini-tin-pokemon-30e-anniversaire.html": "in_stock",
   "https://www.auchan.fr/pokemon-boite-d-entrainement-elite-30e-anniversaire/pr-48e3cb7e-6b54-447f-a4a0-66175cf3cfb9": "in_stock",
-  "https://www.auchan.fr/pokemon-pokemon-coffret-dresseur-elite-25eme-anniversaire/pr-C1433025": "out_of_stock"
+  "https://www.auchan.fr/pokemon-pokemon-coffret-dresseur-elite-25eme-anniversaire/pr-C1433025": "in_stock"
  },
  "flyers": {
-  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "6f689f3f495485b1e84c124cc35bbf754529b76e48f26e7fbc1fb9e0d664e531",
+  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "c89d617c6a9d19b52969e33026a4791c9b2e9777ac138159b3858921ba132557",
   "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3#extraits": "5c1b29ee2d414c4689405f285cb1b360a4522a40d2e9e35dc09def6345a566c2"
  },
  "collections": {
@@ -510,11 +510,13 @@
   "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day": 1
  },
  "veille_t": {
-  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1794335020.9746332,
-  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1794335023.0953739,
-  "https://pokedrop.fr/restock-pokemon-30-ans/": 1794335015.5100777,
-  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1794335018.6078951
+  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1794337971.74641,
+  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1794337011.6032383,
+  "https://pokedrop.fr/restock-pokemon-30-ans/": 1794337968.7085493,
+  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1794337009.2567978
  },
- "alertes": [],
+ "alertes": [
+  1794336744.34842
+ ],
  "bilan_date": "2026-11-10"
 }
