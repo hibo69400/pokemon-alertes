@@ -8,7 +8,7 @@
   "https://www.auchan.fr/pokemon-pokemon-coffret-dresseur-elite-25eme-anniversaire/pr-C1433025": "out_of_stock"
  },
  "flyers": {
-  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "197751173bae2d015660888c8a0551c5cbf0ddab1204d2ec37129fa0a2d3fa3f",
+  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "ce10a203357a7e16a94f76965daa5d8ce636d5252ceeaa4bda61f67ddfa0492f",
   "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3#extraits": "5c1b29ee2d414c4689405f285cb1b360a4522a40d2e9e35dc09def6345a566c2"
  },
  "collections": {
@@ -303,7 +303,7 @@
    "acbff984c85e813c",
    "049be9ba1280ba57",
    "18cc535a27d0a1eb",
-   "c05aa84c3fcf60c9",
+   "c7656a11bbe0585f",
    "5c03b0f43fc196ac",
    "3c5aacf1927aec3c",
    "9a6d80d9f767d262",
@@ -408,6 +408,7 @@
    "91eabe5a53582006",
    "02c732f80fc81545",
    "893146766d122f40",
+   "c05aa84c3fcf60c9",
    "5ddf8c0828ae8ed4",
    "b6d15b50450d3b2b",
    "c053fd357ecefbd0",
@@ -508,10 +509,10 @@
   "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day": 1
  },
  "veille_t": {
-  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1794326174.055347,
-  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1794325210.9742615,
-  "https://pokedrop.fr/restock-pokemon-30-ans/": 1794326171.1817644,
-  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1794325208.9051287
+  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1794329120.5708208,
+  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1794329122.6241603,
+  "https://pokedrop.fr/restock-pokemon-30-ans/": 1794329115.8559363,
+  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1794329118.556138
  },
  "alertes": [],
  "bilan_date": "2026-11-10"
