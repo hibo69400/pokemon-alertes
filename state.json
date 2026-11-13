@@ -10,7 +10,7 @@
   "https://www.auchan.fr/pokemon-paquet-de-cartes-a-collectionner-pokemon-30e-anniversaire-2-boosters/pr-b4ac53b8-8864-43fe-ba9d-839949e1b678": "in_stock"
  },
  "flyers": {
-  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "22014c1dd759d4fba4fa394d546c3b1eec5f15240f2478a2c9ee6f61b3338eee",
+  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "b5bdb4b67ef5f7ff7a3aa1ea9e779caf41ca9b6e1f99ea06822e962191f55ee2",
   "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3#extraits": "5c1b29ee2d414c4689405f285cb1b360a4522a40d2e9e35dc09def6345a566c2"
  },
  "collections": {
@@ -275,7 +275,7 @@
    "7ef7f8ffa065caed",
    "633fe38aa47619d8",
    "86f0539894f46c18",
-   "0d82c7a27f24a925",
+   "a8641b82f9bc277c",
    "89845ae57acc7778",
    "57ca4f249e22ad28",
    "25539a8be8636913",
@@ -412,6 +412,7 @@
    "91eabe5a53582006",
    "02c732f80fc81545",
    "893146766d122f40",
+   "0d82c7a27f24a925",
    "5630440e2fd46204",
    "9ab69cda00bae230",
    "c3dee9168ab97a5a",
@@ -524,10 +525,10 @@
   "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day": 1
  },
  "veille_t": {
-  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1794585909.1661756,
-  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1794585195.8590577,
-  "https://pokedrop.fr/restock-pokemon-30-ans/": 1794585906.136373,
-  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1794585191.4696884
+  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1794588866.1932752,
+  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1794589105.841487,
+  "https://pokedrop.fr/restock-pokemon-30-ans/": 1794588863.1706934,
+  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1794589103.592721
  },
  "alertes": [],
  "bilan_date": "2026-11-13"
