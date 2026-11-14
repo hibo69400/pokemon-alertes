@@ -10,7 +10,7 @@
   "https://www.auchan.fr/pokemon-paquet-de-cartes-a-collectionner-pokemon-30e-anniversaire-2-boosters/pr-b4ac53b8-8864-43fe-ba9d-839949e1b678": "in_stock"
  },
  "flyers": {
-  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "bd0efc49d8df60e69df9ba2aaae29f1237a7becd835a2999c70c5e711742b42f",
+  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "e8ebc6f05367bd9144780b090ea34ab7ca8dcd0be5a1530c0f8cdbb6232bb630",
   "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3#extraits": "5c1b29ee2d414c4689405f285cb1b360a4522a40d2e9e35dc09def6345a566c2"
  },
  "collections": {
@@ -37,7 +37,8 @@
   "https://www.fnac.com/SearchResult/ResultList.aspx?Search=pokemon+30+ans": true,
   "https://www.carrefour.fr/s?q=pokemon+30+ans": true,
   "https://www.intermarche.com/recherche/pokemon%2030%20ans": true,
-  "https://www.coursesu.com/recherche?q=pokemon+30+ans": true
+  "https://www.coursesu.com/recherche?q=pokemon+30+ans": true,
+  "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html": true
  },
  "veille": {
   "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": [
@@ -530,10 +531,10 @@
   "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day": 1
  },
  "veille_t": {
-  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1794671399.2202885,
-  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1794671637.836135,
-  "https://pokedrop.fr/restock-pokemon-30-ans/": 1794671396.4271846,
-  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1794671635.6511106
+  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1794674346.1071112,
+  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1794673630.4361281,
+  "https://pokedrop.fr/restock-pokemon-30-ans/": 1794674343.5802882,
+  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1794673626.3864336
  },
  "alertes": [],
  "bilan_date": "2026-11-14"
