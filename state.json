@@ -10,10 +10,10 @@
   "https://www.auchan.fr/pokemon-paquet-de-cartes-a-collectionner-pokemon-30e-anniversaire-2-boosters/pr-b4ac53b8-8864-43fe-ba9d-839949e1b678": "in_stock"
  },
  "flyers": {
-  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "36441ead4447eee0ee1795c8a884c07513cada737eb861a07c801aa8483419e1",
+  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "75e4cb234eaf84c47c4044611012ce7d953ca997840feb3b4a22955ad451d772",
   "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3#extraits": "5c1b29ee2d414c4689405f285cb1b360a4522a40d2e9e35dc09def6345a566c2",
   "https://www.123catalogue.fr/catalogue/auchan/coffret-journee-pokemon-30ans-604073#extraits": "3402ad5e86495c58c79709f5d6c99a43b2b6d2093e0201dac0048b0cfd0c4c95",
-  "https://www.123catalogue.fr/catalogue/auchan/coffret-journee-pokemon-30ans-604073": "c186f066766c0cec380d6974374ef6125939f911a54f3e5b4025225a6ea0d91c"
+  "https://www.123catalogue.fr/catalogue/auchan/coffret-journee-pokemon-30ans-604073": "48310b23952a394f705da2134d93c72040930827f07c33df34b703649f171b3c"
  },
  "collections": {
   "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html": [
@@ -53,6 +53,7 @@
   ],
   "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": [
    "CBMiigJBVV95cUxQUlNxUEFjZ0VQc0IzSTRuMndDZzVyLUtfUFU5VlVkajNaTUVTemk3RGR4Qm01NFNLcVBlTGxCbEptLXBnLUREV1JidmlWWWZETllSaGFvcWVwRmE1YWJxZjVPQ0Q3NElqWFVJTHVvd0JuRVFyb3dCc21kTDM3endGZVZyQ2ZSOHVLMEg5bWc5VmNvRnhYWThVa3h3SWlSVS1EWHdWWHVNZDNCdVJ3MEl1Q3k4WURmYU53WUh5by1mZnFJR2FpMTJCcnNYd2ppOGhlb2RwQ1E3Z2ExVjh5ckJtNGVIOHlOV3dybFE4N25INVlWenVOYk12MGx5bWRpNll0NDlPcHJjTVJ3QQ",
+   "CBMijgJBVV95cUxQNDhiYkljZW11dlVkUWdyWTdiS1o4dGZVenluUHVVekUzY3RxbkFTYjZTLUVJZEMxQjVnX3lKSjNVbnlCaEVQTDNyaWRxZ2ZhbFl6dmdiTXU0T0I4SUlabFY1VnFES3JtendoX3E3Y2RnZndyYVJTeFpTYXZrdk5zTEdOV0RfNHZFOGRlblp2MGROcFNRWi0xV1JYckR2R3dzVVRMZndQQmVTUFE2RXF5UVp4QjlkS0k0ZjNhcnJlcVlRLUtYS2lWM2VKbFg3V3c0eWdPVHVKWUlRRy1tQmEweEY0eTBhbDhJMng1ckpUaTBJUmdFVEt3ZGVjSmFrbUdPTG9xN1I2c2RfajVpSlE",
    "CBMiiwJBVV95cUxOR2hKR1AyWnkyMThGSXhwekZVT3gtWXBWb29INVM2TjJXZWJvMFdWRnBsNlYyRmdKcUlxbHlESi0wSkgyZjczb0lyWWNYM3ZtU0FVbFAzaEtsamNKeExlRnhmUXpHYUJnbEhOTGxuX29RQWpSUTNCRXltM1U2N3pLR2d5TDF1cV9jR2NZYk1fZ2VsR3dtRUlhb0dWTmlSWkRzREdYMmhubVFCaW5VSGFtb3B3c1ZHX3d1MnVjS0RhTWgyVVRZaTljWG9OUlhYTkdhVktDYVVrN2xYaGJVSXB5OGtpVk5ZNWlrdmtodWdzcXQxTWJtVHBLYXROdHhiN2dtNW16RjlmdVZSaEk",
    "CBMiswFBVV95cUxNUVdBUUV5cHBUMjZORGw3X0cxSi01RTZhRjJ2M2RzSzRYQ3RNSlpZZy04UmRMa1lpU3pkZmFXMWM3Q3Q4MHpRYmI1Yk5JUndGVFlBSHExTmgwNWduVkdzd3hUaEZFb2xLOEZISHBXQ0ctS0ZXcTliS1pRWTZXUk9WbEhPYXJ5ZTdLV3dwcGVOTk9vaVF3Tk1QRTBabEdNOWE2RHpIYTlFZy11cHJOZFQ3WXpjMA",
    "CBMi_AFBVV95cUxOZDEwcnJRc0hlbUxZYjJUNmNFbE1IWTBBZHpjLWpqckdleENueTU0TkZ4emNpQ2RGc01aVnB5Rnd2T2o0OWdnbGFJVFlscEt4TzNHSU93Z3R2eWFDOFY3ZjVULXQ0eUVEV1k0azI5TzkwTTBjNk5BRm9CcjZucUt4c3FBcXZ6YWtBTVY5ZDVFeVhUZGxDUTBxUTR0ZlViX29nNVo5QzdqbnY5MGJ2STM1WFdDcGY3QmhHMW1vQTRwWXpXLUVGNHpHZW5TRnVkdDJmUExmX19VemNYVmhNb1Y3b1ZLbGtIaGNnMDVwdDFRYUsxbko4b1lUMTR5SGU",
@@ -539,10 +540,10 @@
   "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day": 1
  },
  "veille_t": {
-  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1794845364.203498,
-  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1794844650.3505776,
-  "https://pokedrop.fr/restock-pokemon-30-ans/": 1794845361.2450128,
-  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1794844645.9232526
+  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1794848310.4827428,
+  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1794848551.2609327,
+  "https://pokedrop.fr/restock-pokemon-30-ans/": 1794848307.770074,
+  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1794848549.3701308
  },
  "alertes": [],
  "bilan_date": "2026-11-16"
