@@ -7,13 +7,14 @@
   "https://www.auchan.fr/pokemon-boite-d-entrainement-elite-30e-anniversaire/pr-48e3cb7e-6b54-447f-a4a0-66175cf3cfb9": "in_stock",
   "https://www.auchan.fr/pokemon-pokemon-coffret-dresseur-elite-25eme-anniversaire/pr-C1433025": "in_stock",
   "https://www.auchan.fr/amigo-boite-de-cartes-pokemon-top-trainer-30-ans/pr-2087dcfe-1035-4a6a-ad97-05d818a2d009": "in_stock",
-  "https://www.auchan.fr/pokemon-paquet-de-cartes-a-collectionner-pokemon-30e-anniversaire-2-boosters/pr-b4ac53b8-8864-43fe-ba9d-839949e1b678": "in_stock"
+  "https://www.auchan.fr/pokemon-paquet-de-cartes-a-collectionner-pokemon-30e-anniversaire-2-boosters/pr-b4ac53b8-8864-43fe-ba9d-839949e1b678": "in_stock",
+  "https://www.auchan.fr/pokemon-tin-mini-pokemon-30th-anniversary/pr-90c53b64-61a2-4f17-befe-5d057c97c039": "in_stock"
  },
  "flyers": {
-  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "1e1ed3c7e3806788fbd9e5b9de3e0c80d388d37511e937d14b1ef4345d58a478",
+  "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3": "fef8b91e14f5be6b3bc94dd2e339e863fd65df57eba2cabe89a462958da6eaca",
   "https://www.bonial.fr/Villefranche-sur-Saone/Intermarche/p-r3#extraits": "5c1b29ee2d414c4689405f285cb1b360a4522a40d2e9e35dc09def6345a566c2",
   "https://www.123catalogue.fr/catalogue/auchan/coffret-journee-pokemon-30ans-604073#extraits": "3402ad5e86495c58c79709f5d6c99a43b2b6d2093e0201dac0048b0cfd0c4c95",
-  "https://www.123catalogue.fr/catalogue/auchan/coffret-journee-pokemon-30ans-604073": "368fb7c620294dc79758b5cd183e9379f60291f51c537381b0658fe5a5052366"
+  "https://www.123catalogue.fr/catalogue/auchan/coffret-journee-pokemon-30ans-604073": "9a29405f6e2d70f904d63e2db873ebf71c16d0027420ffcd67f6850b0c6fd226"
  },
  "collections": {
   "https://www.lagranderecre.fr/evenements/30-ans-pokemon.html": [
@@ -27,7 +28,8 @@
    "https://www.auchan.fr/amigo-boite-de-cartes-pokemon-top-trainer-30-ans/pr-2087dcfe-1035-4a6a-ad97-05d818a2d009",
    "https://www.auchan.fr/pokemon-boite-d-entrainement-elite-30e-anniversaire/pr-48e3cb7e-6b54-447f-a4a0-66175cf3cfb9",
    "https://www.auchan.fr/pokemon-paquet-de-cartes-a-collectionner-pokemon-30e-anniversaire-2-boosters/pr-b4ac53b8-8864-43fe-ba9d-839949e1b678",
-   "https://www.auchan.fr/pokemon-pokemon-coffret-dresseur-elite-25eme-anniversaire/pr-C1433025"
+   "https://www.auchan.fr/pokemon-pokemon-coffret-dresseur-elite-25eme-anniversaire/pr-C1433025",
+   "https://www.auchan.fr/pokemon-tin-mini-pokemon-30th-anniversary/pr-90c53b64-61a2-4f17-befe-5d057c97c039"
   ]
  },
  "erreurs": {
@@ -547,11 +549,13 @@
   "https://www.reddit.com/r/PokeInvesting/search.rss?q=restock&restrict_sr=on&sort=new&t=day": 1
  },
  "veille_t": {
-  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1794886650.6428971,
-  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1794885688.0123403,
-  "https://pokedrop.fr/restock-pokemon-30-ans/": 1794886647.7863228,
-  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1794885685.6735697
+  "https://www.dealabs.com/discussions/pokemon-tcg-disponibilites-et-reassorts-des-cartes-pokemon-boosters-etb-coffrets-3337943": 1794889606.8247695,
+  "https://news.google.com/rss/search?q=pokemon+cartes+(Villefranche-sur-Sa%C3%B4ne+OR+Beaujolais)+when:30d&hl=fr&gl=FR&ceid=FR:fr": 1794889608.89968,
+  "https://pokedrop.fr/restock-pokemon-30-ans/": 1794889601.3847141,
+  "https://www.pokecardex.com/forums/viewtopic.php?t=50316": 1794889604.4414282
  },
- "alertes": [],
+ "alertes": [
+  1794888614.0756545
+ ],
  "bilan_date": "2026-11-16"
 }
